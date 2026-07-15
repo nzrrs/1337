@@ -1,2 +1,2 @@
 #!/bin/bash
-ip addr show | grep link/ether | awk '{print $2}'
+ifconfig | grep ether | awk '{print $2}'
