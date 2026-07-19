@@ -6,7 +6,7 @@
 /*   By: nsadiki <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 16:01:25 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/07/18 16:35:27 by nsadiki          ###   ########.fr       */
+/*   Updated: 2026/07/19 18:45:13 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	ft_other(int x, int cols)
 	}
 }
 
-void	ft_triangle(int x, int y, int rows, int cols)
+void	ft_rectangle(int x, int y, int rows, int cols)
 {
 	if (rows == 1)
 	{
@@ -77,13 +77,17 @@ void	rush(int x, int y)
 	int	rows;
 	int	cols;
 
+	if (x <= 0 || y <= 0)
+	{
+		return ;
+	}
 	rows = 1;
 	while (rows <= y)
 	{
 		cols = 1;
 		while (cols <= x)
 		{
-			ft_triangle(x, y, rows, cols);
+			ft_rectangle(x, y, rows, cols);
 			cols++;
 		}
 		ft_putchar('\n');

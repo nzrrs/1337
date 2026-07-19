@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlowcase.c                                    :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsadiki <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/18 21:33:51 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/07/19 17:21:28 by nsadiki          ###   ########.fr       */
+/*   Created: 2026/07/19 21:18:56 by nsadiki           #+#    #+#             */
+/*   Updated: 2026/07/19 21:18:56 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_strlowcase(char *str)
+int	ft_strncmp(char *s1, char *s2, unsigned int n)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
-	while (str[i] != '\0')
+	while (s1[i] != '\0' && s2[i] != '\0' && s1[i] == s2[i] && i < n)
 	{
-		if (str[i] >= 'A' && str[i] <= 'Z')
-			str[i] += 32;
 		i++;
 	}
-	return (str);
+	if (i == n || n == 0)
+	{
+		return (0);
+	}
+	return (s1[i] - s2[i]);
 }

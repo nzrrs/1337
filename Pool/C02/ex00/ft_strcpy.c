@@ -6,7 +6,7 @@
 /*   By: nsadiki <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 18:53:24 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/07/18 18:56:30 by nsadiki          ###   ########.fr       */
+/*   Updated: 2026/07/18 22:22:58 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,6 @@ char	*ft_strcpy(char *dest, char *src)
 		dest[i] = src[i];
 		i++;
 	}
-	dest[i + 1] = '\0';
+	dest[i] = '\0';
 	return (dest);
 }
