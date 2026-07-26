@@ -6,7 +6,7 @@
 /*   By: nsadiki <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/26 12:07:11 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/07/26 16:23:25 by nsadiki          ###   ########.fr       */
+/*   Updated: 2026/07/26 17:15:29 by elsalama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@ int	check_deplicates(int board[4][4], int row, int col, int nbr);
 int	check_top_visibility(int board[4][4], int col, int *clues);
 int	check_bottom_visibility(int board[4][4], int col, int *clues);
 int	check_left_visibility(int board[4][4], int row, int *clues);
-int	check_right_visibilty(int board[4][4], int row, int *clues);
+int	check_right_visibility(int board[4][4], int row, int *clues);
 
 int	solve_recursive(int board[4][4], int row, int col, int *clues)
 {
@@ -31,7 +31,7 @@ int	solve_recursive(int board[4][4], int row, int col, int *clues)
 		{
 			board[row][col] = nbr;
 			if (col == 3 && !(check_left_visibility(board, row, clues)
-					&& check_right_visibilty(board, row, clues)))
+					&& check_right_visibility(board, row, clues)))
 			{
 				board[row][col] = 0;
 				nbr++;

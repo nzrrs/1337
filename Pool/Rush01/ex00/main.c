@@ -6,17 +6,24 @@
 /*   By: nsadiki <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/26 13:59:50 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/07/26 14:28:12 by nsadiki          ###   ########.fr       */
+/*   Updated: 2026/07/26 17:22:55 by elsalama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 int	ft_parser(char *str, int *clues);
+void	ft_fill_array(int grid[4][4]);
+void	ft_print_array(int grid[4][4]);
+int	solver(int board[4][4], int row, int col, int *clues);
 
 int	main(int ac, char **av)
 {
 	int	clues[16];
-	int	board[4][4] = {0};
+	int	board[4][4];
 
-	if (!(ft_parser(av[1], clues)) || ac != 2)
+	if (ac != 2 || !(ft_parser(av[1], clues)))
 		return (0);
+	ft_fill_array(board);
+	if (solver(board, 0, 0, clues))
+		ft_print_array(board);
+	return 0;
 }

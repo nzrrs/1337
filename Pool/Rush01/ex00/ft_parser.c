@@ -6,7 +6,7 @@
 /*   By: nsadiki <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/25 16:04:53 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/07/26 16:40:11 by elsalama         ###   ########.fr       */
+/*   Updated: 2026/07/26 17:20:09 by elsalama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,13 @@ int	check_input(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (i % 2 == 0 && !(str[i] >= '1' && str[i] <= '4'))
+		if ((i % 2 == 0) && !(str[i] >= '1' && str[i] <= '4'))
 			return (0);
-		else if (i % 2 != 0 && !(str[i] == ' '))
+		if ((i % 2 != 0) && !(str[i] == ' '))
 			return (0);
 		i++;
 	}
-	if (i != 31)
+	if (i < 31)
 		return (0);
 	return (1);
 }
