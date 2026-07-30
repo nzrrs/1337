@@ -9,77 +9,77 @@
 /*   Updated: 2026/07/29 20:15:53 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include <stdio.h>
 #include <stdlib.h>
 
-int		ft_convert_base2(char *str, char *base_from);
+int		ft_convert_base2(char *str, char *base);
 int		ft_check_base(char *base, int *len);
 
-void	ft_count_recursive(int nb, int base_len, int *counter)
-{
-	if (nb >= base_len)
-	{
-		ft_count_recursive((nb / base_len), base_len, counter);
-	}
-	(*counter)++;
-	return ;
-}
-int	ft_count_size(int nbr, int base_len)
+int	ft_determine_size(int nbr, int base_to_len)
 {
 	int		counter;
-	long	nb;
+	long	n;
 
-	counter = 0;
-	nb = nbr;
-	if (nb < 0)
+	counter = 2;
+	n = nbr;
+	if (n < 0)
 	{
-		nb = -nb;
-		counter = 1;
+		n = -n;
+		counter++;
 	}
-	ft_count_recursive(nb, base_len, &counter);
+	while (n >= base_to_len)
+	{
+		n /= base_to_len;
+		counter++;
+	}
 	return (counter);
 }
-char	*put_nbr_base(int nbr, char *base, int base_len, char *result)
-{
-	long	nb;
 
-	nb = nbr;
-	if (nb < 0)
+char	*ft_fill_result(int nbr, char *base_to, int base_to_len, int size)
+{
+	long	n;
+	int		i;
+	char	*result;
+	int		start;
+
+	n = nbr;
+	start = 0;
+	result = malloc(size);
+	if (result == NULL)
+		return (NULL);
+	if (n < 0)
 	{
-		nb = -nb;
+		n = -n;
+		result[0] = '-';
+		start = 1;
 	}
-	if (nb >= base_len)
-		result = put_nbr_base((nb / base_len), base, base_len, result);
-	*result = base[nb % base_len];
-	result++;
+	i = size - 2;
+	while (i >= start)
+	{
+		result[i] = base_to[n % base_to_len];
+		n /= base_to_len;
+		i--;
+	}
+	result[size - 1] = '\0';
 	return (result);
 }
 
 char	*ft_convert_base(char *nbr, char *base_from, char *base_to)
 {
-	char	*result;
-	char	*start;
-	int		nbr_base1;
+	int		nb_from;
 	int		base_from_len;
 	int		base_to_len;
 	int		size;
+	char	*result;
 
-	if (!(ft_check_base(base_from, &base_from_len) && ft_check_base(base_to,
+	base_to_len = 0;
+	base_from_len = 0;
+	if (!((ft_check_base(base_from, &base_from_len)) && ft_check_base(base_to,
 				&base_to_len)))
 		return (0);
-	nbr_base1 = ft_convert_base2(nbr, base_from);
-	size = ft_count_size(nbr_base1, base_to_len);
-	result = malloc(size + 1);
-	if (!result)
-		return (0);
-	start = result;
-	if (nbr_base1 < 0)
-	{
-		*result = '-';
-		result++;
-	}
-	result = put_nbr_base(nbr_base1, base_to, base_to_len, result);
-	*result = '\0';
-	return (start);
+	nb_from = ft_convert_base2(nbr, base_from);
+	size = ft_determine_size(nb_from, base_to_len);
+	result = ft_fill_result(nb_from, base_to, base_to_len, size);
+	if (result == NULL)
+		return (NULL);
+	return (result);
 }

@@ -10,56 +10,27 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-
-int	ft_check_base(char *base, int *len)
+int	ft_index(char *base, char c)
 {
 	int	i;
-	int	j;
 
 	i = 0;
-	while (base[*len] != '\0')
-	{
-		if (base[*len] == '+' || base[*len] == '-' || ((base[*len] >= 9
-					&& base[*len] <= 32) || base[*len] == ' '))
-			return (0);
-		(*len)++;
-	}
-	if (*len < 1)
-		return (0);
 	while (base[i])
 	{
-		j = i + 1;
-		while (base[j])
+		if (c == base[i])
 		{
-			if (base[i] == base[j])
-				return (0);
-			j++;
-		}
-		i++;
-	}
-	return (*len);
-}
-
-int	ft_get_index(char c, char *base)
-{
-	int	i;
-
-	i = 0;
-	while (base[i])
-	{
-		if (base[i] == c)
 			return (i);
+		}
 		i++;
 	}
 	return (-1);
 }
 
-char	*ft_skip_and_sign(char *str, int *sign, char *base)
+char	*ft_sign_and_skip(char *str, char *base, int *sign)
 {
 	while ((*str >= 9 && *str <= 13) || *str == ' ')
 		str++;
-	while (ft_get_index(*str, base) == -1)
+	while (ft_index(base, *str) == -1)
 	{
 		if (*str == '+' || *str == '-')
 		{
@@ -77,31 +48,60 @@ int	ft_calcul(char *str, char *base, int len)
 {
 	int	i;
 	int	result;
+	int	digit;
 
-	i = 0;
 	result = 0;
-	while (ft_get_index(str[i], base) != -1)
+	i = 0;
+	while (ft_index(base, str[i]) != -1)
 	{
-		result = (result * len) + ft_get_index(str[i], base);
+		digit = ft_index(base, str[i]);
+		result = result * len + (digit);
 		i++;
 	}
 	return (result);
 }
 
-int	ft_convert_base2(char *str, char *base_from)
+int	ft_check_base(char *base, int *len)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (base[*len] != '\0')
+	{
+		if (base[*len] == '+' || base[*len] == '-' || ((base[*len] >= 9
+					&& base[*len] <= 32)))
+			return (0);
+		(*len)++;
+	}
+	if (*len <= 1)
+		return (0);
+	while (base[i])
+	{
+		j = i + 1;
+		while (base[j])
+		{
+			if (base[i] == base[j])
+				return (0);
+			j++;
+		}
+		i++;
+	}
+	return (*len);
+}
+
+int	ft_convert_base2(char *str, char *base)
 {
 	int	sign;
 	int	len;
 	int	result;
 
 	sign = 1;
-	len = 0;
-	if (!ft_check_base(base_from, &len))
+	if (!ft_check_base(base, &len))
 		return (0);
-	printf("%d", len);
-	str = ft_skip_and_sign(str, &sign, base_from);
-	if (!str)
+	str = ft_sign_and_skip(str, base, &sign);
+	if (str == 0)
 		return (0);
-	result = ft_calcul(str, base_from, len);
+	result = ft_calcul(str, base, len);
 	return (result * sign);
 }
