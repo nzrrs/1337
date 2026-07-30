@@ -97,6 +97,7 @@ int	ft_convert_base2(char *str, char *base)
 	int	result;
 
 	sign = 1;
+	len = 0;
 	if (!ft_check_base(base, &len))
 		return (0);
 	str = ft_sign_and_skip(str, base, &sign);
