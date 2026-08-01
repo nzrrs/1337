@@ -24,6 +24,7 @@ int	ft_str_len(char *str)
 	}
 	return (i);
 }
+
 char	*ft_strdup(char *src)
 {
 	char	*dest;
@@ -41,6 +42,7 @@ char	*ft_strdup(char *src)
 	dest[i] = '\0';
 	return (dest);
 }
+
 t_stock_str	*ft_strs_to_tab(int ac, char **av)
 {
 	int			i;

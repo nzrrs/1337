@@ -14,6 +14,7 @@
 # define FT_BOOLEAN_H
 
 # include <unistd.h>
+
 typedef int	t_bool;
 # define EVEN(x) ((x) % 2 == 0)
 # define TRUE 1
