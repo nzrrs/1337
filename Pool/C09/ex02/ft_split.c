@@ -27,12 +27,12 @@ int	ft_is_sep(char *sep, char c)
 	return (0);
 }
 
-int	ft_word_len(char *str)
+int	ft_word_len(char *str, char *sep)
 {
 	int	len;
 
 	len = 0;
-	while (str[len])
+	while (str[len] && !ft_is_sep(sep, str[len]))
 		len++;
 	return (len);
 }
@@ -41,12 +41,15 @@ int	ft_count_words(char *str, char *sep)
 {
 	int	counter;
 	int	i;
+	int	is_word;
 
 	i = 0;
 	counter = 0;
 	while (str[i])
 	{
-		if (!(ft_is_sep(sep, str[i])) && (i == 0 || ft_is_sep(sep, str[i - 1])))
+		is_word = !(ft_is_sep(sep, str[i])) && (i == 0 || ft_is_sep(sep, str[i
+					- 1]));
+		if (is_word)
 			counter++;
 		i++;
 	}
@@ -61,20 +64,25 @@ char	**ft_split(char *str, char *charset)
 	int		k;
 	int		j;
 	char	*word;
+	int		is_word;
 
 	size = ft_count_words(str, charset);
-	result = malloc(size + 1);
+	result = malloc(sizeof(char *) * (size + 1));
 	if (result == NULL)
 		return (NULL);
 	i = 0;
+	k = 0;
 	while (str[i])
 	{
-		if (!(ft_is_sep(charset, str[i])) && (i == 0 || ft_is_sep(charset, str[i
-					- 1])))
+		is_word = !(ft_is_sep(charset, str[i])) && (i == 0 || ft_is_sep(charset,
+					str[i - 1]));
+		if (is_word)
 		{
 			j = 0;
-			word = malloc(ft_count_words(str, charset) + 1);
-			while (str[i] && ft_is_sep(charset, str[i + 1]))
+			word = malloc(ft_word_len(str, charset) + 1);
+			if (word == NULL)
+				return (NULL);
+			while (str[i] && !ft_is_sep(charset, str[i]))
 			{
 				word[j] = str[i];
 				i++;
@@ -86,7 +94,7 @@ char	**ft_split(char *str, char *charset)
 		}
 		i++;
 	}
-	result[i] = NULL;
+	result[k] = NULL;
 	return (result);
 }
 
@@ -102,9 +110,7 @@ int	main(void)
 	while (result[i])
 	{
 		printf("result[%d] = \"%s\"\n", i, result[i]);
-		free(result[i]);
 		i++;
 	}
-	free(result);
 	return (0);
 }
