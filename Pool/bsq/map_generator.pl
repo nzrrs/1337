@@ -1,17 +1,24 @@
 #!/usr/bin/perl
-use warnings;
 use strict;
-die "Usage: program x y density" unless (scalar(@ARGV) == 3);
-my ($x, $y, $density) = @ARGV;
-print "$y.ox\n";
-for (my $i = 0; $i < $y; $i++) {
-for (my $j = 0; $j < $x; $j++) {
-if (int(rand($y) * 2) < $density) {
-print "o";
-}
-else {
-print ".";
-}
-}
-print "\n";
+use warnings;
+
+# usage: perl map_generator.pl <size> [obstacle_density(0-100)] [empty] [full] [square]
+# writes a valid, randomly generated bsq map to stdout
+
+my $size    = shift @ARGV // 10;
+my $density = shift @ARGV // 20;
+my $empty   = shift @ARGV // '.';
+my $full    = shift @ARGV // 'o';
+my $square  = shift @ARGV // 'x';
+
+die "size must be a positive integer\n" if $size !~ /^\d+$/ || $size <= 0;
+die "density must be between 0 and 100\n" if $density < 0 || $density > 100;
+
+print "$size$empty$full$square\n";
+for my $row (1 .. $size) {
+    my $line = '';
+    for my $col (1 .. $size) {
+        $line .= (int(rand(100)) < $density) ? $full : $empty;
+    }
+    print "$line\n";
 }
