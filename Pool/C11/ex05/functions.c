@@ -1,25 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr.c                                        :+:      :+:    :+:   */
+/*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsadiki <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/03 18:37:12 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/08/03 18:37:12 by nsadiki          ###   ########.fr       */
+/*   Created: 2026/08/04 19:01:23 by nsadiki           #+#    #+#             */
+/*   Updated: 2026/08/04 19:52:14 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-
-void	ft_putstr(char *str)
+int	ft_plus(int a, int b)
 {
-	int	i;
+	return (a + b);
+}
 
-	i = 0;
-	while (str[i] != '\0')
-	{
-		write(1, &str[i], 1);
-		i++;
-	}
+int	ft_minus(int a, int b)
+{
+	return (a - b);
+}
+
+int	ft_multiply(int a, int b)
+{
+	return (a * b);
+}
+
+int	ft_divide(int a, int b)
+{
+	return (a / b);
+}
+
+int	ft_modulo(int a, int b)
+{
+	return (a % b);
 }

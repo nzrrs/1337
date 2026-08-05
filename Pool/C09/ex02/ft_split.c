@@ -6,11 +6,10 @@
 /*   By: nsadiki <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/02 14:33:25 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/08/02 23:32:00 by nsadiki          ###   ########.fr       */
+/*   Updated: 2026/08/03 17:25:15 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <stdlib.h>
 
 int	ft_is_sep(char *sep, char c)
@@ -37,19 +36,35 @@ int	ft_word_len(char *str, char *sep)
 	return (len);
 }
 
+char	*copy_word(char *str, char *charset, int *i)
+{
+	int		j;
+	char	*word;
+
+	j = 0;
+	word = malloc(ft_word_len(&str[*i], charset) + 1);
+	if (!word)
+		return (NULL);
+	while (str[*i] && !ft_is_sep(charset, str[*i]))
+	{
+		word[j] = str[*i];
+		(*i)++;
+		j++;
+	}
+	word[j] = '\0';
+	return (word);
+}
+
 int	ft_count_words(char *str, char *sep)
 {
 	int	counter;
 	int	i;
-	int	is_word;
 
 	i = 0;
 	counter = 0;
 	while (str[i])
 	{
-		is_word = !(ft_is_sep(sep, str[i])) && (i == 0 || ft_is_sep(sep, str[i
-					- 1]));
-		if (is_word)
+		if (!(ft_is_sep(sep, str[i])) && (i == 0 || ft_is_sep(sep, str[i - 1])))
 			counter++;
 		i++;
 	}
@@ -59,58 +74,24 @@ int	ft_count_words(char *str, char *sep)
 char	**ft_split(char *str, char *charset)
 {
 	char	**result;
-	int		size;
 	int		i;
 	int		k;
-	int		j;
-	char	*word;
-	int		is_word;
 
-	size = ft_count_words(str, charset);
-	result = malloc(sizeof(char *) * (size + 1));
+	result = malloc(sizeof(char *) * (ft_count_words(str, charset) + 1));
 	if (result == NULL)
 		return (NULL);
 	i = 0;
 	k = 0;
 	while (str[i])
 	{
-		is_word = !(ft_is_sep(charset, str[i])) && (i == 0 || ft_is_sep(charset,
-					str[i - 1]));
-		if (is_word)
+		if (!(ft_is_sep(charset, str[i]))
+			&& (i == 0 || ft_is_sep(charset, str[i - 1])))
 		{
-			j = 0;
-			word = malloc(ft_word_len(str, charset) + 1);
-			if (word == NULL)
-				return (NULL);
-			while (str[i] && !ft_is_sep(charset, str[i]))
-			{
-				word[j] = str[i];
-				i++;
-				j++;
-			}
-			word[j] = '\0';
-			result[k] = word;
+			result[k] = copy_word(str, charset, &i);
 			k++;
 		}
 		i++;
 	}
 	result[k] = NULL;
 	return (result);
-}
-
-int	main(void)
-{
-	char	**result;
-	int		i;
-
-	result = ft_split("Hello,,world;42;Piscine", ",;");
-	if (!result)
-		return (1);
-	i = 0;
-	while (result[i])
-	{
-		printf("result[%d] = \"%s\"\n", i, result[i]);
-		i++;
-	}
-	return (0);
 }
