@@ -1,58 +1,65 @@
-#include "bsq.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vnx <vnx@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/05 15:20:00 by vnx               #+#    #+#             */
+/*   Updated: 2026/08/05 15:20:00 by vnx              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static int	process_map(const char *path)
+#include "../include/bsq.h"
+
+void	process_fd(int fd)
 {
-	char	*content;
-	char	**lines;
-	int		line_count;
-	t_map	map;
+	char		*content;
+	int			size;
+	t_map		map;
+	t_square	square;
 
-	memset(&map, 0, sizeof(t_map));
-	content = read_file(path);
-	if (!content)
+	content = read_all(fd, &size);
+	if (!content || !parse_map(content, size, &map))
 	{
 		print_error();
-		return (1);
+		free(content);
+		return ;
 	}
-	lines = split_lines(content, &line_count);
 	free(content);
-	if (!lines)
-	{
-		print_error();
-		return (1);
-	}
-	if (!parse_map(lines, line_count, &map))
-	{
-		print_error();
-		free_lines(lines, line_count);
-		free_map(&map);
-		return (1);
-	}
-	free_lines(lines, line_count);
-	solve_map(&map);
-	fill_square(&map);
+	square = solve_map(&map);
+	fill_square(&map, square);
 	print_map(&map);
 	free_map(&map);
-	return (0);
+}
+
+void	process_file(char *filename)
+{
+	int	fd;
+
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+	{
+		print_error();
+		return ;
+	}
+	process_fd(fd);
+	close(fd);
 }
 
 int	main(int argc, char **argv)
 {
 	int	i;
-	int	status;
 
-	status = 0;
 	if (argc == 1)
-		status = process_map(NULL);
-	else
+		process_fd(0);
+	i = 1;
+	while (i < argc)
 	{
-		i = 1;
-		while (i < argc)
-		{
-			if (process_map(argv[i]) != 0)
-				status = 1;
-			i++;
-		}
+		process_file(argv[i]);
+		if (i < argc - 1)
+			write(1, "\n", 1);
+		i++;
 	}
-	return (status);
+	return (0);
 }

@@ -1,64 +1,64 @@
 #ifndef BSQ_H
 # define BSQ_H
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
 # include <fcntl.h>
+# include <stdlib.h>
 # include <unistd.h>
 
-# define DEFAULT_EMPTY '.'
-# define DEFAULT_FULL 'o'
-# define DEFAULT_SQUARE 'x'
+# define BUFFER_SIZE 4096
 
 typedef struct s_map
 {
-	int		height;
-	int		width;
-	char	empty_c;
-	char	full_c;
-	char	square_c;
-	char	**grid;
-	int		**dp;
-	int		best_size;
-	int		best_row;
-	int		best_col;
-}	t_map;
+	int				rows;
+	int				cols;
+	char			empty;
+	char			obstacle;
+	char			full;
+	char			**grid;
+}					t_map;
 
-/* reader.c */
-char	*read_file(const char *path);
-char	**split_lines(const char *content, int *line_count);
+typedef struct s_square
+{
+	int				size;
+	int				row;
+	int				col;
+}					t_square;
 
-/* parser.c */
-int		parse_map(char **lines, int line_count, t_map *map);
+typedef struct s_chunk
+{
+	char			data[BUFFER_SIZE];
+	int				size;
+	struct s_chunk	*next;
+}					t_chunk;
 
-/* parser_utils.c */
-int		ft_isdigit(char c);
-int		is_valid_header_char(char c);
-int		parse_header(const char *header, t_map *map, int *declared_height);
-
-/* validator.c */
-int		validate_map(t_map *map, int declared_height, int line_count,
-			char **lines);
-
-/* solver.c */
-void	solve_map(t_map *map);
-
-/* fill_square.c */
-void	fill_square(t_map *map);
-
-/* output.c */
-void	print_map(t_map *map);
-void	print_error(void);
-
-/* free.c */
-void	free_map(t_map *map);
-void	free_lines(char **lines, int count);
-
-/* utils.c */
-size_t	ft_strlen(const char *s);
-char	*ft_strdup(const char *s);
-int		min3(int a, int b, int c);
-void	*ft_calloc(size_t nmemb, size_t size);
+char				*read_all(int fd, int *size);
+int					read_chunk(t_chunk **head, t_chunk **tail, int fd,
+						int *total);
+char				*join_chunks(t_chunk *head, int total);
+int					parse_map(char *content, int size, t_map *map);
+int					find_header_end(char *content, int size);
+int					allocate_grid(t_map *map);
+void				copy_grid(char *content, int start, t_map *map);
+int					parse_header(char *content, int header_len, t_map *map);
+int					parse_number(char *str, int len, int *value);
+int					count_map_columns(char *content, int start, int size);
+int					validate_map_body(char *content, int start, int size,
+						t_map *map);
+int					valid_cell(char c, t_map *map);
+int					validate_one_row(char *content, int *pos, t_map *map);
+t_square			solve_map(t_map *map);
+int					*new_dp_row(int cols);
+void				update_best(t_square *best, int value, int row, int col);
+int					cell_value(t_map *map, int row, int col, int **dp);
+void				solve_rows(t_map *map, t_square *best, int **dp);
+void				fill_square(t_map *map, t_square square);
+void				print_map(t_map *map);
+void				print_error(void);
+void				free_map(t_map *map);
+void				free_chunks(t_chunk *head);
+int					ft_min3(int a, int b, int c);
+int					is_printable(char c);
+void				process_fd(int fd);
+void				process_file(char *filename);
 
 #endif

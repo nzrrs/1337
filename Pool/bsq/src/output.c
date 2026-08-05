@@ -1,18 +1,31 @@
-#include "bsq.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   output.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vnx <vnx@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/05 15:20:00 by vnx               #+#    #+#             */
+/*   Updated: 2026/08/05 15:20:00 by vnx              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/bsq.h"
 
 void	print_map(t_map *map)
 {
-	int	i;
+	int	row;
 
-	i = 0;
-	while (i < map->height)
+	row = 0;
+	while (row < map->rows)
 	{
-		printf("%s\n", map->grid[i]);
-		i++;
+		write(1, map->grid[row], map->cols);
+		write(1, "\n", 1);
+		row++;
 	}
 }
 
 void	print_error(void)
 {
-	fprintf(stderr, "map error\n");
+	write(1, "map error\n", 10);
 }

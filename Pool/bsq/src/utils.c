@@ -1,56 +1,30 @@
-#include "bsq.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vnx <vnx@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/05 15:20:00 by vnx               #+#    #+#             */
+/*   Updated: 2026/08/05 15:20:00 by vnx              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-size_t	ft_strlen(const char *s)
+#include "../include/bsq.h"
+
+int	ft_min3(int a, int b, int c)
 {
-	size_t	i;
+	int	min;
 
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+	min = a;
+	if (b < min)
+		min = b;
+	if (c < min)
+		min = c;
+	return (min);
 }
 
-char	*ft_strdup(const char *s)
+int	is_printable(char c)
 {
-	char	*dup;
-	size_t	len;
-	size_t	i;
-
-	len = ft_strlen(s);
-	dup = malloc(len + 1);
-	if (!dup)
-		return (NULL);
-	i = 0;
-	while (i < len)
-	{
-		dup[i] = s[i];
-		i++;
-	}
-	dup[len] = '\0';
-	return (dup);
-}
-
-int	min3(int a, int b, int c)
-{
-	int	m;
-
-	m = a;
-	if (b < m)
-		m = b;
-	if (c < m)
-		m = c;
-	return (m);
-}
-
-void	*ft_calloc(size_t nmemb, size_t size)
-{
-	void	*ptr;
-	size_t	total;
-
-	total = nmemb * size;
-	ptr = malloc(total);
-	if (!ptr)
-		return (NULL);
-	memset(ptr, 0, total);
-	return (ptr);
+	return (c >= 32 && c <= 126);
 }

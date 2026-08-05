@@ -1,64 +1,70 @@
-#include "bsq.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vnx <vnx@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/05 15:20:00 by vnx               #+#    #+#             */
+/*   Updated: 2026/08/05 15:20:00 by vnx              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	ft_isdigit(char c)
-{
-	return (c >= '0' && c <= '9');
-}
+#include "../include/bsq.h"
 
-/*
-** A header char must be a printable, non-whitespace, non-digit symbol.
-** (printable ASCII range is 33-126, which excludes space and control chars)
-*/
-int	is_valid_header_char(char c)
+int	parse_number(char *str, int len, int *value)
 {
-	if (c < 33 || c > 126)
-		return (0);
-	if (ft_isdigit(c))
-		return (0);
-	return (1);
-}
-
-/*
-** header format: <positive integer>[<empty><full><square>]
-** the three extra chars are optional, but if present there must be
-** exactly three, all distinct, all valid symbols.
-*/
-int	parse_header(const char *header, t_map *map, int *declared_height)
-{
+	long	number;
 	int		i;
-	long	n;
 
-	i = 0;
-	if (!header || !ft_isdigit(header[0]))
+	if (len <= 0)
 		return (0);
-	n = 0;
-	while (ft_isdigit(header[i]))
+	number = 0;
+	i = 0;
+	while (i < len)
 	{
-		n = n * 10 + (header[i] - '0');
-		if (n > 1000000)
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+		number = number * 10 + str[i] - '0';
+		if (number > 2147483647)
 			return (0);
 		i++;
 	}
-	if (n <= 0)
+	if (number == 0)
 		return (0);
-	*declared_height = (int)n;
-	if (header[i] == '\0')
-	{
-		map->empty_c = DEFAULT_EMPTY;
-		map->full_c = DEFAULT_FULL;
-		map->square_c = DEFAULT_SQUARE;
-		return (1);
-	}
-	if (ft_strlen(header + i) != 3)
-		return (0);
-	if (!is_valid_header_char(header[i]) || !is_valid_header_char(header[i + 1])
-		|| !is_valid_header_char(header[i + 2]))
-		return (0);
-	if (header[i] == header[i + 1] || header[i + 1] == header[i + 2]
-		|| header[i] == header[i + 2])
-		return (0);
-	map->empty_c = header[i];
-	map->full_c = header[i + 1];
-	map->square_c = header[i + 2];
+	*value = number;
 	return (1);
+}
+
+int	parse_header(char *content, int header_len, t_map *map)
+{
+	int	number_len;
+
+	if (header_len < 4)
+		return (0);
+	number_len = header_len - 3;
+	if (!parse_number(content, number_len, &map->rows))
+		return (0);
+	map->empty = content[number_len];
+	map->obstacle = content[number_len + 1];
+	map->full = content[number_len + 2];
+	if (!is_printable(map->empty) || !is_printable(map->obstacle))
+		return (0);
+	if (!is_printable(map->full))
+		return (0);
+	if (map->empty == map->obstacle || map->empty == map->full)
+		return (0);
+	if (map->obstacle == map->full)
+		return (0);
+	return (1);
+}
+
+int	count_map_columns(char *content, int start, int size)
+{
+	int	cols;
+
+	cols = 0;
+	while (start + cols < size && content[start + cols] != '\n')
+		cols++;
+	return (cols);
 }

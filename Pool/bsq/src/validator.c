@@ -1,32 +1,57 @@
-#include "bsq.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validator.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vnx <vnx@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/05 15:20:00 by vnx               #+#    #+#             */
+/*   Updated: 2026/08/05 15:20:00 by vnx              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	validate_map(t_map *map, int declared_height, int line_count,
-		char **lines)
+#include "../include/bsq.h"
+
+int	valid_cell(char c, t_map *map)
 {
-	int	i;
-	int	j;
-	int	width;
+	return (c == map->empty || c == map->obstacle);
+}
 
-	if (declared_height != line_count - 1)
-		return (0);
-	if (declared_height <= 0)
-		return (0);
-	width = (int)ft_strlen(lines[1]);
-	if (width <= 0)
-		return (0);
-	i = 1;
-	while (i <= declared_height)
+int	validate_one_row(char *content, int *pos, t_map *map)
+{
+	int	col;
+
+	col = 0;
+	while (content[*pos] && content[*pos] != '\n')
 	{
-		if ((int)ft_strlen(lines[i]) != width)
+		if (!valid_cell(content[*pos], map) || col >= map->cols)
 			return (0);
-		j = 0;
-		while (lines[i][j])
-		{
-			if (lines[i][j] != map->empty_c && lines[i][j] != map->full_c)
-				return (0);
-			j++;
-		}
-		i++;
+		col++;
+		(*pos)++;
 	}
+	if (col != map->cols || content[*pos] != '\n')
+		return (0);
+	(*pos)++;
 	return (1);
+}
+
+int	validate_map_body(char *content, int start, int size, t_map *map)
+{
+	int	row;
+	int	pos;
+
+	if (start >= size)
+		return (0);
+	map->cols = count_map_columns(content, start, size);
+	if (map->cols <= 0)
+		return (0);
+	row = 0;
+	pos = start;
+	while (row < map->rows)
+	{
+		if (!validate_one_row(content, &pos, map))
+			return (0);
+		row++;
+	}
+	return (pos == size);
 }

@@ -1,27 +1,31 @@
 NAME = bsq
-
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-INC = -Iinclude
+INCLUDES = -I include
 
-SRC_DIR = src
-OBJ_DIR = obj
+SRC = src/main.c \
+      src/reader.c \
+      src/parser.c \
+      src/parser_utils.c \
+      src/validator.c \
+      src/solver.c \
+      src/fill_square.c \
+      src/output.c \
+      src/free.c \
+      src/utils.c
 
-SRCS = fill_square.c free.c main.c output.c parser.c parser_utils.c \
-       reader.c solver.c utils.c validator.c
-OBJS = $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
+OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c include/bsq.h
-	@mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) $(INC) -c $< -o $@
+$(NAME): $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+%.o: %.c include/bsq.h
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm -rf $(OBJ_DIR)
+	rm -f $(OBJ)
 
 fclean: clean
 	rm -f $(NAME)

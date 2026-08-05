@@ -1,101 +1,84 @@
-#include "bsq.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   reader.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vnx <vnx@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/05 15:20:00 by vnx               #+#    #+#             */
+/*   Updated: 2026/08/05 15:20:00 by vnx              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static char	*read_fd(int fd)
+#include "../include/bsq.h"
+
+int	read_chunk(t_chunk **head, t_chunk **tail, int fd, int *total)
 {
-	char	*buf;
-	char	*tmp;
-	char	chunk[4096];
-	ssize_t	r;
-	size_t	len;
+	t_chunk	*new;
+	int			bytes;
 
-	len = 0;
-	buf = ft_calloc(1, 1);
-	if (!buf)
-		return (NULL);
-	r = read(fd, chunk, sizeof(chunk));
-	while (r > 0)
+	new = malloc(sizeof(t_chunk));
+	if (!new)
+		return (-1);
+	bytes = read(fd, new->data, BUFFER_SIZE);
+	if (bytes <= 0)
 	{
-		tmp = malloc(len + (size_t)r + 1);
-		if (!tmp)
-		{
-			free(buf);
-			return (NULL);
-		}
-		memcpy(tmp, buf, len);
-		memcpy(tmp + len, chunk, (size_t)r);
-		len += (size_t)r;
-		tmp[len] = '\0';
-		free(buf);
-		buf = tmp;
-		r = read(fd, chunk, sizeof(chunk));
+		free(new);
+		if (bytes < 0)
+			return (-1);
+		return (0);
 	}
-	if (r < 0)
-	{
-		free(buf);
-		return (NULL);
-	}
-	return (buf);
+	new->size = bytes;
+	new->next = NULL;
+	if (!*head)
+		*head = new;
+	else
+		(*tail)->next = new;
+	*tail = new;
+	*total += bytes;
+	return (1);
 }
 
-char	*read_file(const char *path)
+char	*join_chunks(t_chunk *head, int total)
 {
-	int		fd;
 	char	*content;
+	int		i;
+	int		pos;
 
-	if (!path)
-		return (read_fd(0));
-	fd = open(path, O_RDONLY);
-	if (fd < 0)
+	content = malloc(total + 1);
+	if (!content)
 		return (NULL);
-	content = read_fd(fd);
-	close(fd);
+	pos = 0;
+	while (head)
+	{
+		i = 0;
+		while (i < head->size)
+			content[pos++] = head->data[i++];
+		head = head->next;
+	}
+	content[pos] = '\0';
 	return (content);
 }
 
-char	**split_lines(const char *content, int *line_count)
+char	*read_all(int fd, int *size)
 {
-	int		i;
-	int		start;
-	int		total;
-	int		count;
-	char	**lines;
+	t_chunk	*head;
+	t_chunk	*tail;
+	char		*content;
+	int			status;
 
-	total = 0;
-	i = 0;
-	while (content[i])
+	head = NULL;
+	tail = NULL;
+	*size = 0;
+	status = 1;
+	while (status == 1)
+		status = read_chunk(&head, &tail, fd, size);
+	if (status == -1)
 	{
-		if (content[i] == '\n')
-			total++;
-		i++;
-	}
-	if (i > 0 && content[i - 1] != '\n')
-		total++;
-	lines = malloc(sizeof(char *) * (total + 1));
-	if (!lines)
+		free_chunks(head);
 		return (NULL);
-	i = 0;
-	start = 0;
-	count = 0;
-	while (1)
-	{
-		if (content[i] == '\n' || content[i] == '\0')
-		{
-			if (i - start > 0 || content[i] == '\n')
-			{
-				lines[count] = malloc((i - start) + 1);
-				if (!lines[count])
-					return (NULL);
-				memcpy(lines[count], content + start, i - start);
-				lines[count][i - start] = '\0';
-				count++;
-			}
-			start = i + 1;
-			if (content[i] == '\0')
-				break ;
-		}
-		i++;
 	}
-	lines[count] = NULL;
-	*line_count = count;
-	return (lines);
+	content = join_chunks(head, *size);
+	free_chunks(head);
+	return (content);
 }

@@ -1,44 +1,41 @@
-#include "bsq.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vnx <vnx@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/05 15:20:00 by vnx               #+#    #+#             */
+/*   Updated: 2026/08/05 15:20:00 by vnx              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	free_lines(char **lines, int count)
+#include "../include/bsq.h"
+
+void	free_chunks(t_chunk *head)
 {
-	int	i;
+	t_chunk	*next;
 
-	if (!lines)
-		return ;
-	i = 0;
-	while (i < count)
+	while (head)
 	{
-		free(lines[i]);
-		i++;
+		next = head->next;
+		free(head);
+		head = next;
 	}
-	free(lines);
 }
 
 void	free_map(t_map *map)
 {
 	int	i;
 
-	if (map->grid)
+	if (!map || !map->grid)
+		return ;
+	i = 0;
+	while (i < map->rows)
 	{
-		i = 0;
-		while (i < map->height)
-		{
-			free(map->grid[i]);
-			i++;
-		}
-		free(map->grid);
-		map->grid = NULL;
+		free(map->grid[i]);
+		i++;
 	}
-	if (map->dp)
-	{
-		i = 0;
-		while (i < map->height)
-		{
-			free(map->dp[i]);
-			i++;
-		}
-		free(map->dp);
-		map->dp = NULL;
-	}
+	free(map->grid);
+	map->grid = NULL;
 }

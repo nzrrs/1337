@@ -1,54 +1,94 @@
-#include "bsq.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   solver.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vnx <vnx@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/05 15:20:00 by vnx               #+#    #+#             */
+/*   Updated: 2026/08/05 15:20:00 by vnx              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static int	*alloc_dp_row(int width)
+#include "../include/bsq.h"
+
+int	*new_dp_row(int cols)
 {
-	return (ft_calloc(width, sizeof(int)));
+	int	*row;
+	int	i;
+
+	row = malloc(sizeof(int) * cols);
+	if (!row)
+		return (NULL);
+	i = 0;
+	while (i < cols)
+	{
+		row[i] = 0;
+		i++;
+	}
+	return (row);
 }
 
-/*
-** classic "maximal square" DP:
-** dp[i][j] = size of the largest all-empty square whose bottom-right
-** corner is (i, j). If the cell is an obstacle, dp[i][j] = 0.
-** Otherwise dp[i][j] = 1 + min(top, left, top-left) neighbours,
-** or 1 if on the first row/column.
-*/
-void	solve_map(t_map *map)
+void	update_best(t_square *best, int value, int row, int col)
 {
-	int	i;
-	int	j;
+	if (value > best->size)
+	{
+		best->size = value;
+		best->row = row;
+		best->col = col;
+	}
+}
 
-	map->dp = malloc(sizeof(int *) * map->height);
-	i = 0;
-	while (i < map->height)
+int	cell_value(t_map *map, int row, int col, int **dp)
+{
+	if (map->grid[row][col] == map->obstacle)
+		return (0);
+	if (row == 0 || col == 0)
+		return (1);
+	return (1 + ft_min3(dp[0][col], dp[1][col - 1], dp[0][col - 1]));
+}
+
+void	solve_rows(t_map *map, t_square *best, int **dp)
+{
+	int	row;
+	int	col;
+	int	*temp;
+
+	row = 0;
+	while (row < map->rows)
 	{
-		map->dp[i] = alloc_dp_row(map->width);
-		i++;
-	}
-	map->best_size = 0;
-	map->best_row = 0;
-	map->best_col = 0;
-	i = 0;
-	while (i < map->height)
-	{
-		j = 0;
-		while (j < map->width)
+		col = 0;
+		while (col < map->cols)
 		{
-			if (map->grid[i][j] == map->empty_c)
-			{
-				if (i == 0 || j == 0)
-					map->dp[i][j] = 1;
-				else
-					map->dp[i][j] = 1 + min3(map->dp[i - 1][j],
-							map->dp[i][j - 1], map->dp[i - 1][j - 1]);
-				if (map->dp[i][j] > map->best_size)
-				{
-					map->best_size = map->dp[i][j];
-					map->best_row = i - map->best_size + 1;
-					map->best_col = j - map->best_size + 1;
-				}
-			}
-			j++;
+			dp[1][col] = cell_value(map, row, col, dp);
+			update_best(best, dp[1][col], row, col);
+			col++;
 		}
-		i++;
+		temp = dp[0];
+		dp[0] = dp[1];
+		dp[1] = temp;
+		row++;
 	}
+}
+
+t_square	solve_map(t_map *map)
+{
+	t_square	best;
+	int			*dp[2];
+
+	best.size = 0;
+	best.row = 0;
+	best.col = 0;
+	dp[0] = new_dp_row(map->cols);
+	dp[1] = new_dp_row(map->cols);
+	if (!dp[0] || !dp[1])
+	{
+		free(dp[0]);
+		free(dp[1]);
+		return (best);
+	}
+	solve_rows(map, &best, dp);
+	free(dp[0]);
+	free(dp[1]);
+	return (best);
 }

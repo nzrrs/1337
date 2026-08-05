@@ -1,21 +1,37 @@
-#include "bsq.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fill_square.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vnx <vnx@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/05 15:20:00 by vnx               #+#    #+#             */
+/*   Updated: 2026/08/05 15:20:00 by vnx              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	fill_square(t_map *map)
+#include "../include/bsq.h"
+
+void	fill_square(t_map *map, t_square square)
 {
-	int	i;
-	int	j;
+	int	start_row;
+	int	start_col;
+	int	row;
+	int	col;
 
-	if (map->best_size <= 0)
+	if (square.size <= 0)
 		return ;
-	i = map->best_row;
-	while (i < map->best_row + map->best_size)
+	start_row = square.row - square.size + 1;
+	start_col = square.col - square.size + 1;
+	row = start_row;
+	while (row <= square.row)
 	{
-		j = map->best_col;
-		while (j < map->best_col + map->best_size)
+		col = start_col;
+		while (col <= square.col)
 		{
-			map->grid[i][j] = map->square_c;
-			j++;
+			map->grid[row][col] = map->full;
+			col++;
 		}
-		i++;
+		row++;
 	}
 }
