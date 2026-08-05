@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vnx <vnx@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: nsadiki <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/05 15:20:00 by vnx               #+#    #+#             */
-/*   Updated: 2026/08/05 15:20:00 by vnx              ###   ########.fr       */
+/*   Created: 2026/08/05 17:09:59 by nsadiki           #+#    #+#             */
+/*   Updated: 2026/08/05 17:09:59 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/bsq.h"
+#include "bsq.h"
 
 int	find_header_end(char *content, int size)
 {

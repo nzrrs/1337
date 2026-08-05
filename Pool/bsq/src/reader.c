@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   reader.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vnx <vnx@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: nsadiki <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/05 15:20:00 by vnx               #+#    #+#             */
-/*   Updated: 2026/08/05 15:20:00 by vnx              ###   ########.fr       */
+/*   Created: 2026/08/05 17:10:15 by nsadiki           #+#    #+#             */
+/*   Updated: 2026/08/05 17:10:15 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/bsq.h"
+#include "bsq.h"
 
 int	read_chunk(t_chunk **head, t_chunk **tail, int fd, int *total)
 {
 	t_chunk	*new;
-	int			bytes;
+	int		bytes;
 
 	new = malloc(sizeof(t_chunk));
 	if (!new)
@@ -64,8 +64,8 @@ char	*read_all(int fd, int *size)
 {
 	t_chunk	*head;
 	t_chunk	*tail;
-	char		*content;
-	int			status;
+	char	*content;
+	int		status;
 
 	head = NULL;
 	tail = NULL;
