@@ -11,13 +11,12 @@
 /* ************************************************************************** */
 
 #include "ft.h"
-#include <string.h>
 
 int	ft_check_arguments(int ac, char **av)
 {
 	if (ac != 4)
 		return (0);
-	if ((strlen(av[2]) != 1))
+	if ((ft_strlen(av[2]) != 1))
 	{
 		ft_putstr("0\n");
 		return (0);
