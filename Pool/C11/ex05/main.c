@@ -6,7 +6,7 @@
 /*   By: nsadiki <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 19:07:45 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/08/04 19:50:15 by nsadiki          ###   ########.fr       */
+/*   Updated: 2026/08/06 18:11:12 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	main(int ac, char **av)
 	op = ft_get_operator_index(av);
 	if (op == -1)
 	{
-		ft_putnbr(0);
+		ft_putstr("0\n");
 		return (0);
 	}
 	if (!ft_check_zero(op, b))
