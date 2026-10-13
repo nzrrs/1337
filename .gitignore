@@ -10,4 +10,4 @@ a.out
 *.dll
 *.dylib
 *.exe
-./Curriculum/*/*.pdf
+./Curriculum/**/*.pdf
