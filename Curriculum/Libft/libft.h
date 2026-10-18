@@ -18,8 +18,8 @@
 # include <string.h>
 # include <unistd.h>
 
-# define SIZE_T_MAX ((size_t)-1)
-# define LONG_MAX 19223372036854775807
+# define SIZE_MAX 18446744073709551615UL
+# define LONG_MAX 9223372036854775807L
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);

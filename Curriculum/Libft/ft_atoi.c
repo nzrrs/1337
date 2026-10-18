@@ -29,7 +29,7 @@ int	ft_atoi(const char *nptr)
 	}
 	while (*nptr && ft_isdigit(*nptr))
 	{
-		if (result > (9223372036854775807 - (*nptr - '0')) / 10)
+		if (result > (LONG_MAX - (*nptr - '0')) / 10)
 		{
 			if (sign == 1)
 				return (-1);
