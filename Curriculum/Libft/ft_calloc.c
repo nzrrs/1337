@@ -6,6 +6,8 @@ void	*ft_calloc(size_t n, size_t size)
 	size_t			i;
 	size_t			total;
 
+	if (n != 0 && size > SIZE_T_MAX / n)
+		return (NULL);
 	total = n * size;
 	p = malloc(total);
 	if (p == NULL)
