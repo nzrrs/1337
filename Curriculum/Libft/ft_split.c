@@ -95,28 +95,3 @@ char	**ft_split(char const *s, char c)
 	}
 	return (arr);
 }
-
-// word is a sequence of non sep chars
-// int	main(void)
-// {
-// 	char const	*s;
-// 	char		c;
-// 	char		**array;
-// 	int			i;
-//
-// 	s = ";Hello;World;;";
-// 	c = ';';
-// 	array = ft_split(s, c);
-// 	printf("String : %s ", s);
-// 	printf("+++++++++++++++\n");
-// 	i = 0;
-// 	if (!array)
-// 		return (1);
-// 	while (array[i])
-// 	{
-// 		printf("[%d] : %s\n", i, array[i]);
-// 		i++;
-// 	}
-// 	printf("[%d] %s\n", i, array[i] ? "NOT NULL (bug)" : "NULL (ok)");
-// 	return (0);
-// }
