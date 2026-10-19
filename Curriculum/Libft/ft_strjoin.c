@@ -26,8 +26,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (s1_len > SIZE_MAX - s2_len - 1)
 		return (NULL);
 	total = s1_len + s2_len + 1;
-	dest = malloc(s1_len + s2_len);
-	ft_strlcpy(dest, s1, total);
+	dest = malloc(total);
+	ft_strlcpy(dest, s1, s1_len + 1);
 	ft_strlcat(dest, s2, total);
 	return (dest);
 }
