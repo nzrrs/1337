@@ -6,7 +6,7 @@
 /*   By: nsadiki <nsadiki@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/13 15:35:40 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/10/19 19:50:52 by nsadiki          ###   ########.fr       */
+/*   Updated: 2026/10/20 09:19:21 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
 int		ft_isalnum(int c);
-int		ft_isascii(int c);
 int		ft_isprint(int c);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
@@ -50,4 +49,5 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strtrim(char const *s1, char const *set);
 char	**ft_split(char const *s, char c);
+char	*ft_itoa(int i);
 #endif
