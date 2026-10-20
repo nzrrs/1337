@@ -11,13 +11,6 @@
 /* ************************************************************************** */
 #include "libft.h"
 
-static int	ft_is_sep(char a, char c)
-{
-	if (a == c)
-		return (1);
-	return (0);
-}
-
 static int	ft_count_words(char const *s, char c)
 {
 	int	counter;
@@ -27,8 +20,7 @@ static int	ft_count_words(char const *s, char c)
 	i = 0;
 	while (s[i])
 	{
-		if (!ft_is_sep(s[i], c) && (i == 0 || (i != 0 && ft_is_sep(s[i - 1],
-						c))))
+		if (s[i] != c && (i == 0 || (i != 0 && s[i - 1] == c)))
 			counter++;
 		i++;
 	}
@@ -42,7 +34,7 @@ static int	ft_word_len(char const *s, int start, char c)
 	word_len = 0;
 	while (s[start])
 	{
-		if (ft_is_sep(s[start], c))
+		if (s[start] == c)
 			return (word_len);
 		word_len++;
 		start++;
@@ -64,29 +56,22 @@ static void	*free_words(char **arr, size_t count)
 	return (NULL);
 }
 
-char	**ft_split(char const *s, char c)
+static char	**ft_arr_fill(char const *s, char **arr, size_t arr_len, char c)
 {
-	char	**arr;
-	size_t	arr_len;
+	size_t	s_i;
 	size_t	arr_i;
 	size_t	word_len;
-	size_t	s_i;
 
-	arr_i = 0;
 	s_i = 0;
-	arr_len = ft_count_words(s, c);
-	arr = ft_calloc(arr_len + 1, sizeof(char *));
-	if (!arr)
-		free_words(arr, arr_len);
+	arr_i = 0;
 	while (s[s_i])
 	{
-		if (!(ft_is_sep(s[s_i], c)) && (s_i == 0 || (s_i != 0 && ft_is_sep(s[s_i
-							- 1], c))))
+		if (s[s_i] != c && (s_i == 0 || s[s_i - 1] == c))
 		{
 			word_len = ft_word_len(s, s_i, c);
 			arr[arr_i] = ft_substr(s, s_i, word_len);
 			if (arr[arr_i] == NULL)
-				free_words(arr, arr_len);
+				return (free_words(arr, arr_len));
 			arr_i++;
 			s_i += word_len;
 		}
@@ -94,4 +79,18 @@ char	**ft_split(char const *s, char c)
 			s_i++;
 	}
 	return (arr);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	char	**arr;
+	size_t	arr_len;
+
+	if (!s)
+		return (NULL);
+	arr_len = ft_count_words(s, c);
+	arr = ft_calloc(arr_len + 1, sizeof(char *));
+	if (!arr)
+		return (NULL);
+	return (ft_arr_fill(s, arr, arr_len, c));
 }
