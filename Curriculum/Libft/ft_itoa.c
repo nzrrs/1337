@@ -1,56 +1,58 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoi.c                                          :+:      :+:    :+:   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsadiki <nsadiki@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 09:18:07 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/10/20 09:36:58 by nsadiki          ###   ########.fr       */
+/*   Updated: 2026/10/20 10:33:28 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
 
-static int	ft_get_len(int nbr)
+static int	ft_count(int n)
 {
-	int	len;
+	int		digits;
+	long	num;
 
-	len = 1;
-	while (nbr < 0)
+	num = n;
+	digits = 1;
+	while (num < 0)
 	{
-		len++;
-		nbr *= -1;
+		digits++;
+		num *= -1;
 	}
-	while (nbr >= 10)
+	while (num >= 10)
 	{
-		nbr /= 10;
-		len++;
+		num /= 10;
+		digits++;
 	}
-	return (len);
+	return (digits);
 }
 
 char	*ft_itoa(int i)
 {
-	char	*str;
-	int		len;
+	char	*res;
+	int		size;
+	long	value;
 
-	len = ft_get_len(i) + 1;
-	str = malloc(len);
-	if (!str)
+	value = i;
+	size = ft_count(value) + 1;
+	res = malloc(size);
+	if (!res)
 		return (NULL);
-	if (i < 0)
+	if (value < 0)
 	{
-		str[0] = '-';
-		i *= -1;
+		res[0] = '-';
+		value *= -1;
 	}
-	len--;
-	str[len] = '\0';
-	while (i >= 10)
+	res[--size] = '\0';
+	while (value >= 10)
 	{
-		len--;
-		str[len] = i % 10 + '0';
-		i = i / 10;
+		res[--size] = value % 10 + '0';
+		value /= 10;
 	}
-	str[len - 1] = i + '0';
-	return (str);
+	res[--size] = value + '0';
+	return (res);
 }
