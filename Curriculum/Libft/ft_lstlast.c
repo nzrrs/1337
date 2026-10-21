@@ -6,12 +6,11 @@
 /*   By: nsadiki <nsadiki@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/21 12:49:18 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/10/21 12:58:10 by nsadiki          ###   ########.fr       */
+/*   Updated: 2026/10/21 20:20:27 by nzr              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <unistd.h>
 
 t_list	*ft_lstlast(t_list *lst)
 {
