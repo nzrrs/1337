@@ -64,12 +64,3 @@ cc -Wall -Wextra -Werror main.c -L. -lft -o my_program
 ### Use of AI
 
 AI was used to review my code and to help me understand concepts and errors (for example pointers, memory allocation and edge cases). I wrote all the functions myself, and AI was also used to help draft this README.
-
-
-
-<p align="center">
-  <img src="https://img.shields.io/badge/42-Libft-000000?style=for-the-badge&logo=42&logoColor=white" alt="42 Libft">
-  <img src="https://img.shields.io/badge/language-C-00599C?style=for-the-badge&logo=c&logoColor=white" alt="C">
-  <img src="https://img.shields.io/badge/GNU-glibc-A42E2B?style=for-the-badge&logo=gnu&logoColor=white" alt="GNU C Library">
-  <img src="https://img.shields.io/badge/library-libft.a-success?style=for-the-badge" alt="libft.a">
-</p>
