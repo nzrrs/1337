@@ -72,5 +72,4 @@ AI was used to review my code and to help me understand concepts and errors (for
   <img src="https://img.shields.io/badge/language-C-00599C?style=for-the-badge&logo=c&logoColor=white" alt="C">
   <img src="https://img.shields.io/badge/GNU-glibc-A42E2B?style=for-the-badge&logo=gnu&logoColor=white" alt="GNU C Library">
   <img src="https://img.shields.io/badge/library-libft.a-success?style=for-the-badge" alt="libft.a">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/2/22/Heckert_GNU_white.svg" alt="GNU" height="90">
 </p>
