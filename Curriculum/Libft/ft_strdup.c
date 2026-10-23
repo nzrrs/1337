@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nzr <nsadiki@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: nsadiki <nsadiki@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/18 22:25:22 by nzr               #+#    #+#             */
-/*   Updated: 2026/10/18 22:25:23 by nzr              ###   ########.fr       */
+/*   Created: 2026/10/23 13:48:50 by nsadiki           #+#    #+#             */
+/*   Updated: 2026/10/23 13:49:06 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@ char	*ft_strdup(const char *s)
 	d = malloc(size);
 	if (d == NULL)
 		return (NULL);
-	memmove(d, s, size);
+	ft_memmove(d, s, size);
 	return (d);
 }
