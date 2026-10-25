@@ -30,5 +30,8 @@ fclean : clean
 	rm -f $(NAME)
 
 re : fclean all
+so:
+	$(CC) -fPIC $(CFLAGS) -c $(SRCS)
+	gcc -shared -o libft.so $(OBJS)
 
 .PHONY : all clean fclean re 
