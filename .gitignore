@@ -11,4 +11,5 @@ a.out
 *.dylib
 *.exe
 ./Curriculum/**/*.pdf
+./Curriculum/**/*.so
 Curriculum/libft-unit-test/
