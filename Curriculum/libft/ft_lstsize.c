@@ -13,8 +13,8 @@
 
 unsigned int	ft_lstsize(t_list *lst)
 {
-	size_t	len;
-	t_list	*p;
+	unsigned int	len;
+	t_list			*p;
 
 	len = 0;
 	p = lst;
