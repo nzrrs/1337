@@ -14,14 +14,12 @@
 unsigned int	ft_lstsize(t_list *lst)
 {
 	unsigned int	len;
-	t_list			*p;
 
 	len = 0;
-	p = lst;
-	while (p)
+	while (lst)
 	{
 		len++;
-		p = p->next;
+		lst = lst->next;
 	}
 	return (len);
 }
