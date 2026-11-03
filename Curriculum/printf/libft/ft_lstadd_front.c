@@ -1,0 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nsadiki <nsadiki@student.1337.ma>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/21 10:17:58 by nsadiki           #+#    #+#             */
+/*   Updated: 2026/10/23 13:52:32 by nsadiki          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "libft.h"
+
+void	ft_lstadd_front(t_list **lst, t_list *new_node)
+{
+	if (!lst || !new_node)
+		return ;
+	new_node->next = *lst;
+	*lst = new_node;
+}
