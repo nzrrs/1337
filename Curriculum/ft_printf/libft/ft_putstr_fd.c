@@ -6,14 +6,14 @@
 /*   By: nsadiki <nsadiki@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 20:36:17 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/10/23 13:51:13 by nsadiki          ###   ########.fr       */
+/*   Updated: 2026/11/03 12:48:50 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+int	ft_putstr_fd(char *s, int fd)
 {
 	if (!s)
-		return ;
-	write(fd, s, ft_strlen(s));
+		return (-1);
+	return (write(fd, s, ft_strlen(s)));
 }

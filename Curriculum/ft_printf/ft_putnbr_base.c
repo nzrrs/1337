@@ -5,16 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsadiki <nsadiki@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/11/03 10:02:02 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/11/03 11:18:01 by nsadiki          ###   ########.fr       */
+/*   Created: 2026/11/03 13:24:39 by nsadiki           #+#    #+#             */
+/*   Updated: 2026/11/03 13:24:42 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include "ft_printf.h"
 
 void	ft_putchar(char c)
 {
-	write(1, &c, 1);
+	(write(1, &c, 1));
 }
 
 int	ft_check_base(char *base, int *len)
@@ -45,23 +45,42 @@ int	ft_check_base(char *base, int *len)
 	return (1);
 }
 
-void	ft_putnbr_base(int nbr, char *base, int *total_printed)
+void	ft_putnbr_base_recursive(int nbr, int base_len, char *base)
 {
 	long	nb;
-	int		len;
 
-	len = 0;
 	nb = nbr;
-	if (!(ft_check_base(base, &len)))
-		return ;
 	if (nb < 0)
 	{
 		nb = -nb;
 		ft_putchar('-');
-		(*total_printed)++;
 	}
-	if (nb >= len)
-		ft_putnbr_base((nb / len), base, total_printed);
-	ft_putchar(base[nb % len]);
-	(*total_printed)++;
+	if (nb >= base_len)
+		ft_putnbr_base_recursive((nb / base_len), base_len, base);
+	ft_putchar(base[nb % base_len]);
+}
+
+int	ft_putnbr_base(int nbr, char *base)
+{
+	int		nbr_len;
+	int		base_len;
+	long	nb;
+
+	base_len = 0;
+	nbr_len = 1;
+	nb = nbr;
+	if (!(ft_check_base(base, &base_len)))
+		return (-1);
+	if (nb < 0)
+	{
+		nb *= -1;
+		nbr_len++;
+	}
+	while (nb >= base_len)
+	{
+		nb /= base_len;
+		nbr_len++;
+	}
+	ft_putnbr_base_recursive(nbr, base_len, base);
+	return (nbr_len);
 }

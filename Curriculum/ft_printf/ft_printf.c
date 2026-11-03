@@ -6,20 +6,18 @@
 /*   By: nsadiki <nsadiki@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/03 01:18:37 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/11/03 11:24:17 by nsadiki          ###   ########.fr       */
+/*   Updated: 2026/11/03 13:48:48 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "libft/libft.h"
-#include <stdio.h>
 
-int	ft_dispatch(char specifier, va_list *args, int *total);
 int	ft_printf(const char *format, ...)
 {
 	va_list	list;
 	int		total_printed;
 	int		i;
+	int		result;
 
 	va_start(list, format);
 	i = 0;
@@ -28,19 +26,17 @@ int	ft_printf(const char *format, ...)
 	{
 		if (format[i] == '%')
 		{
-			if (format[i + 1] == 'd')
-			{
-				ft_putnbr_base(va_arg(list, int), BASE10, &total_printed);
-				i++;
-			}
-			i++;
+			result = ft_dispatcher(format[i + 1], &list);
+			i += 2;
 		}
 		else
 		{
-			ft_putchar_fd(format[i], 0);
+			result = ft_putchar_fd(format[i], 1);
 			i++;
-			total_printed++;
 		}
+		if (result < 0)
+			return (-1);
+		total_printed += result;
 	}
 	va_end(list);
 	return (total_printed);
@@ -48,10 +44,15 @@ int	ft_printf(const char *format, ...)
 
 int	main(void)
 {
-	int	a;
+	int	total_printed_mine;
+	int	total_printed_original;
 
-	a = ft_printf("Total : %zu\n", sizeof(va_list));
-	printf("a => %d\n", a);
-	// printf("Total : %d\n", 5);
+	total_printed_mine = ft_printf("Number : %d\nString : %s\nChar : %c\n", 5,
+			"Hello", 'a');
+	printf("total_printed_mine=> %d\n", total_printed_mine);
+	printf("============================================\n");
+	total_printed_original = printf("Number : %d\nString : %s\nChar : %c\n", 5,
+			"Hello", 'a');
+	printf("total_printed_original=> %d\n", total_printed_original);
 	return (0);
 }
