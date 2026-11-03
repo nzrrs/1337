@@ -1,10 +1,9 @@
-.PHONY all clean fclean re  
 NAME = libftprintf.a
 SRCS = $(wildcard *.c)
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a 
 OBJS = $(SRCS:.c=.o)
-CFLAGS = -Wall - Wextra -Werror -I$(LIBFT_DIR)
+CFLAGS = -Wall -Wextra -Werror -I$(LIBFT_DIR)
 CC = cc
 
 all : $(NAME)
@@ -17,7 +16,7 @@ $(LIBFT) :
 	make -C $(LIBFT_DIR)
 
 %.o : %.c ft_printf.h
-	$(CC) $(CFLAGS) -c $@ -o $<
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
 	rm -f $(OBJS)
@@ -29,3 +28,4 @@ fclean : clean
 
 re : fclean all
 
+.PHONY : al	clean fclean re
