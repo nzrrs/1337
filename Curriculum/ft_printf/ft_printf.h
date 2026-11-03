@@ -10,17 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+// TODO: REMOVE THIS !
+#include <stdio.h>
+// TODO:  REMOVE THIS !
 #include "libft/libft.h"
 #include <stdarg.h>
 
-// To remove later
-#include <stdio.h>
-//
 // MACROS
 #define BASE10 "0123456789"
 #define BASE16MAJ "0123456789ABCDEF"
 #define BASE16MIN "0123456789abcdef"
 
 int	ft_printf(const char *, ...);
-int	ft_putnbr_base(int nbr, char *base);
-int	ft_dispatcher(char specifier, va_list *list);
