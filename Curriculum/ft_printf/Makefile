@@ -1,5 +1,5 @@
 NAME = libftprintf.a
-SRCS = $(wildcard ./src/*.c)
+SRCS = $(shell find src -name "*.c")
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a 
 OBJS = $(SRCS:.c=.o)

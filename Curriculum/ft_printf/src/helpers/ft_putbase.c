@@ -40,27 +40,28 @@ int	ft_check_base(char *base, int *len)
 	return (1);
 }
 
-void	ft_putbase_recursive(unsigned long nb, int base_len, char *base)
+int	ft_putbase_recursive(unsigned long nb, int base_len, char *base)
 {
-	if (nb >= base_len)
-		ft_putbase_recursive((nb / base_len), base_len, base);
-	ft_putchar(base[nb % base_len]);
+	int	count;
+
+	count = 0;
+	if (nb >= (unsigned long)base_len)
+	{
+		count = ft_putbase_recursive((nb / base_len), base_len, base);
+		if (count == -1)
+			return (-1);
+	}
+	if (ft_putchar(base[nb % base_len]) == -1)
+		return (-1);
+	return (count + 1);
 }
 
 int	ft_putbase(unsigned long nb, char *base)
 {
-	int	nbr_len;
 	int	base_len;
 
 	base_len = 0;
-	nbr_len = 1;
 	if (!(ft_check_base(base, &base_len)))
 		return (-1);
-	while (nb >= base_len)
-	{
-		nb /= base_len;
-		nbr_len++;
-	}
-	ft_putbase_recursive(nb, base_len, base);
-	return (nbr_len);
+	return (ft_putbase_recursive(nb, base_len, base));
 }

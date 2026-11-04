@@ -12,38 +12,29 @@
 
 #include "../../include/ft_printf.h"
 
-void	ft_putnbr_recursive(int nbr)
-{
-	long	nb;
-
-	nb = nbr;
-	if (nb < 0)
-	{
-		nb *= -1;
-		ft_putchar('-');
-	}
-	if (nb >= 10)
-		ft_putnbr_recursive((nb / 10));
-	ft_putchar(nb % 10);
-}
-
 int	ft_putnbr(int nbr)
 {
-	int		nbr_len;
 	long	nb;
+	int		count;
+	int		test;
 
-	nbr_len = 1;
 	nb = nbr;
+	count = 0;
 	if (nb < 0)
 	{
 		nb *= -1;
-		nbr_len++;
+		if (ft_putchar('-') == -1)
+			return (-1);
+		count++;
 	}
-	while (nb >= 10)
+	if (nb >= 10)
 	{
-		nb /= 10;
-		nbr_len++;
+		test = ft_putnbr(nb / 10);
+		if (test == -1)
+			return (-1);
+		count += test;
 	}
-	ft_putnbr_recursive(nbr);
-	return (nbr_len);
+	if (ft_putchar(nb % 10 + '0') == -1)
+		return (-1);
+	return (count);
 }
