@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
+#include <limits.h>
 #include <stdarg.h>
 #include <unistd.h>
 
@@ -19,8 +20,8 @@
 #define BASE16MAJ "0123456789ABCDEF"
 #define BASE16MIN "0123456789abcdef"
 
-int	ft_printf(const char *, ...);
+int	ft_printf(const char *format, ...);
 int	ft_putnbr(int nbr);
-int	ft_putbase(unsigned long, char *base);
+int	ft_putbase(unsigned long nb, char *base);
 int	ft_putchar(char c);
 int	ft_putstr(char *s);

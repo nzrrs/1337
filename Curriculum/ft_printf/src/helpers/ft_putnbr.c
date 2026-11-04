@@ -20,6 +20,7 @@ int	ft_putnbr(int nbr)
 
 	nb = nbr;
 	count = 0;
+	test = 0;
 	if (nb < 0)
 	{
 		nb *= -1;
@@ -36,5 +37,5 @@ int	ft_putnbr(int nbr)
 	}
 	if (ft_putchar(nb % 10 + '0') == -1)
 		return (-1);
-	return (count);
+	return (count + 1);
 }
