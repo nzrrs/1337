@@ -4,7 +4,6 @@
 
 int	main(void)
 {
-	// printf("Hello : %l");
-	ft_printf("Hello : %l");
+	ft_printf("Hello : %d\n", 12.1);
 	return (0);
 }

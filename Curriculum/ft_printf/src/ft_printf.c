@@ -20,6 +20,7 @@ int	ft_printf(const char *format, ...)
 	int				i;
 	va_list			ap;
 	unsigned long	up;
+	char			*s;
 
 	total_printed = 0;
 	i = 0;
@@ -32,11 +33,23 @@ int	ft_printf(const char *format, ...)
 				return (-1);
 			if (format[i + 1] == 's')
 			{
-				test = ft_putstr(va_arg(ap, char *));
-				if (test == -1)
-					return (-1);
-				total_printed += test;
-				i += 2;
+				s = va_arg(ap, char *);
+				if (s == NULL)
+				{
+					test = ft_putstr("(null)");
+					if (test == -1)
+						return (-1);
+					total_printed += test;
+					i += 2;
+				}
+				else
+				{
+					test = ft_putstr(s);
+					if (test == -1)
+						return (-1);
+					total_printed += test;
+					i += 2;
+				}
 			}
 			else if (format[i + 1] == 'd' || format[i + 1] == 'i')
 			{
@@ -89,13 +102,24 @@ int	ft_printf(const char *format, ...)
 			else if (format[i + 1] == 'p')
 			{
 				up = (unsigned long)va_arg(ap, void *);
-				if (write(1, "0x", 2) == -1)
-					return (-1);
-				test = ft_putbase(up, BASE16MIN);
-				if (test == -1)
-					return (-1);
-				total_printed += test + 2;
-				i += 2;
+				if (!up)
+				{
+					test = ft_putstr("(nil)");
+					if (test == -1)
+						return (-1);
+					total_printed += test;
+					i += 2;
+				}
+				else
+				{
+					if (write(1, "0x", 2) == -1)
+						return (-1);
+					test = ft_putbase(up, BASE16MIN);
+					if (test == -1)
+						return (-1);
+					total_printed += test + 2;
+					i += 2;
+				}
 			}
 			else
 				return (-1);
