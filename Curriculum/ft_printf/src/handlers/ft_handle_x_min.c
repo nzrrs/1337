@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tolower.c                                       :+:      :+:    :+:   */
+/*   ft_handle_x_min.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsadiki <nsadiki@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/14 11:30:52 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/10/14 11:30:55 by nsadiki          ###   ########.fr       */
+/*   Created: 2026/11/05 14:55:14 by nsadiki           #+#    #+#             */
+/*   Updated: 2026/11/05 14:55:21 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-int	ft_tolower(int c)
+int	ft_handle_x_min(va_list *ap)
 {
-	if (c >= 'A' && c <= 'Z')
-		return (c + 32);
-	else
-		return (c);
+	unsigned int	x;
+
+	x = va_arg(*ap, int);
+	return (ft_putbase(x, BASE16MIN));
 }

@@ -1,19 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_handle_x_maj.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsadiki <nsadiki@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/20 20:36:17 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/11/03 12:48:50 by nsadiki          ###   ########.fr       */
+/*   Created: 2026/11/05 14:54:57 by nsadiki           #+#    #+#             */
+/*   Updated: 2026/11/05 14:56:50 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "libft.h"
 
-int	ft_putstr_fd(char *s, int fd)
+#include "ft_printf.h"
+
+int	ft_handle_x_maj(va_list *ap)
 {
-	if (!s)
-		return (-1);
-	return (write(fd, s, ft_strlen(s)));
+	unsigned int	x;
+
+	x = va_arg(*ap, int);
+	return (ft_putbase(x, BASE16MAJ));
 }

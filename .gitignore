@@ -13,3 +13,6 @@ a.out
 ./Curriculum/**/*.pdf
 ./Curriculum/**/*.so
 Curriculum/libft-unit-test/
+Curriculum/ft_printf/printfTester/
+
+Curriculum/ft_printf/compile_flags.txt

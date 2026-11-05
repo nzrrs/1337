@@ -1,21 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
+/*   ft_handle_s.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsadiki <nsadiki@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/21 10:17:58 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/10/23 13:52:32 by nsadiki          ###   ########.fr       */
+/*   Created: 2026/11/05 14:35:05 by nsadiki           #+#    #+#             */
+/*   Updated: 2026/11/05 14:37:07 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-void	ft_lstadd_front(t_list **lst, t_list *new_node)
+int	ft_handle_s(va_list *ap)
 {
-	if (!lst || !new_node)
-		return ;
-	new_node->next = *lst;
-	*lst = new_node;
+	char	*s;
+
+	s = va_arg(*ap, char *);
+	if (s == NULL)
+		return (ft_putstr("(null)"));
+	return (ft_putstr(s));
 }

@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_handle_p.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsadiki <nsadiki@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/14 11:33:38 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/10/23 13:50:52 by nsadiki          ###   ########.fr       */
+/*   Created: 2026/11/05 14:37:31 by nsadiki           #+#    #+#             */
+/*   Updated: 2026/11/05 14:44:39 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-char	*ft_strchr(const char *s, int c)
+int	ft_handle_p(va_list *ap)
 {
-	size_t	i;
+	unsigned long	up;
+	int				test;
 
-	i = 0;
-	while (s[i])
+	up = (unsigned long)va_arg(*ap, void *);
+	if (!up)
+		return (ft_putstr("(nil)"));
+	else
 	{
-		if (s[i] == (char)c)
-			return ((char *)&s[i]);
-		i++;
+		if (write(1, "0x", 2) == -1)
+			return (-1);
+		test = ft_putbase(up, BASE16MIN);
+		if (test == -1)
+			return (-1);
+		return (test + 2);
 	}
-	if ((char)c == '\0')
-		return ((char *)&s[i]);
-	return (NULL);
 }

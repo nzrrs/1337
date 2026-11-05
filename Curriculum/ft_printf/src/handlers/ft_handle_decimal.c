@@ -1,18 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
+/*   ft_handle_decimal.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsadiki <nsadiki@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/20 11:30:23 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/11/03 12:50:33 by nsadiki          ###   ########.fr       */
+/*   Created: 2026/11/05 14:42:38 by nsadiki           #+#    #+#             */
+/*   Updated: 2026/11/05 14:43:36 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "ft_printf.h"
 
-#include "libft.h"
-
-int	ft_putchar_fd(char c, int fd)
+int	ft_handle_decimal(va_list *ap)
 {
-	return (write(fd, &c, 1));
+	int	nb;
+
+	nb = va_arg(*ap, int);
+	return (ft_putnbr(nb));
 }

@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_handle_u.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsadiki <nsadiki@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/20 20:42:53 by nsadiki           #+#    #+#             */
-/*   Updated: 2026/10/23 13:51:17 by nsadiki          ###   ########.fr       */
+/*   Created: 2026/11/05 14:31:40 by nsadiki           #+#    #+#             */
+/*   Updated: 2026/11/05 14:34:51 by nsadiki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-void	ft_putnbr_fd(int n, int fd)
+int	ft_handle_u(va_list *ap)
 {
-	long	nbr;
+	unsigned int	u;
 
-	nbr = n;
-	if (nbr < 0)
-	{
-		nbr *= -1;
-		ft_putchar_fd('-', fd);
-	}
-	if (nbr >= 10)
-		ft_putnbr_fd(nbr / 10, fd);
-	ft_putchar_fd(nbr % 10 + '0', fd);
+	u = va_arg(*ap, unsigned int);
+	return (ft_putbase(u, BASE10));
 }
