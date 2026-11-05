@@ -21,7 +21,7 @@
 # define BASE16MAJ "0123456789ABCDEF"
 # define BASE16MIN "0123456789abcdef"
 
-// FUNCTIONS
+// MAIN FUNCTIONS
 int	ft_printf(const char *format, ...);
 int	ft_handler(char spec, va_list *ap);
 // HELPERS

@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int	ft_check_base(char *base, int *len)
+static int	ft_check_base(char *base, int *len)
 {
 	int	j;
 	int	i;
@@ -40,7 +40,7 @@ int	ft_check_base(char *base, int *len)
 	return (1);
 }
 
-int	ft_putbase_recursive(unsigned long nb, int base_len, char *base)
+static int	ft_putbase_recursive(unsigned long nb, int base_len, char *base)
 {
 	int	count;
 
