@@ -10,24 +10,26 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdarg.h>
-#include <unistd.h>
-
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-FT_PRINTF_H // MACROS
+# include <stdarg.h>
+# include <unistd.h>
+
+// BASE MACROS
 # define BASE10 "0123456789"
 # define BASE16MAJ "0123456789ABCDEF"
 # define BASE16MIN "0123456789abcdef"
 
-	int
-	ft_printf(const char *format, ...);
+// FUNCTIONS
+int	ft_printf(const char *format, ...);
+int	ft_handler(char spec, va_list *ap);
+// HELPERS
 int	ft_putnbr(int nbr);
 int	ft_putbase(unsigned long nb, char *base);
 int	ft_putchar(char c);
 int	ft_putstr(char *s);
-int	ft_handler(char spec, va_list *ap);
+// HANDLERS
 int	ft_handle_char(char spec, va_list *ap);
 int	ft_handle_x_min(va_list *ap);
 int	ft_handle_x_maj(va_list *ap);
@@ -36,4 +38,4 @@ int	ft_handle_u(va_list *ap);
 int	ft_handle_decimal(va_list *ap);
 int	ft_handle_p(va_list *ap);
 
-#endif // !FT_PRINTF_H
+#endif

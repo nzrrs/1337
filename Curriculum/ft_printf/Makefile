@@ -1,7 +1,13 @@
+.PHONY : all clean fclean re
+
 NAME = libftprintf.a
+
 SRCS = $(shell find src -name "*.c")
+
 OBJS = $(SRCS:.c=.o)
+
 CFLAGS = -Wall -Wextra -Werror -Iincludes
+
 CC = cc
 
 all : $(NAME)
@@ -9,7 +15,7 @@ all : $(NAME)
 $(NAME) : $(OBJS)
 	ar rcs $(NAME) $(OBJS)
 
-%.o : %.c include/ft_printf.h
+%.o : %.c includes/ft_printf.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
@@ -19,4 +25,3 @@ fclean : clean
 
 re : fclean all
 
-.PHONY : all clean fclean re
