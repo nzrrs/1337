@@ -2,7 +2,10 @@
 
 NAME = libftprintf.a
 
-SRCS = $(shell find src -name "*.c")
+SRCS =	./src/ft_handler.c ./src/helpers/ft_putnbr.c ./src/helpers/ft_putbase.c ./src/helpers/ft_putchar.c \
+		./src/helpers/ft_putstr.c ./src/ft_printf.c ./src/handlers/ft_handle_char.c ./src/handlers/ft_handle_s.c \
+		./src/handlers/ft_handle_x_min.c ./src/handlers/ft_handle_p.c ./src/handlers/ft_handle_u.c ./src/handlers/ft_handle_x_maj.c \
+		./src/handlers/ft_handle_decimal.c
 
 OBJS = $(SRCS:.c=.o)
 
