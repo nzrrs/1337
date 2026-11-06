@@ -42,6 +42,8 @@ int	ft_printf(const char *format, ...)
 
 	total_printed = 0;
 	i = 0;
+	if (format == NULL)
+		return (-1);
 	va_start(ap, format);
 	while (format[i])
 	{
