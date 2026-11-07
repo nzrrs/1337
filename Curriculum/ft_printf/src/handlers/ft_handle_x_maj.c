@@ -16,6 +16,6 @@ int	ft_handle_x_maj(va_list *ap)
 {
 	unsigned int	x;
 
-	x = va_arg(*ap, int);
+	x = va_arg(*ap, unsigned int);
 	return (ft_putbase(x, BASE16MAJ));
 }

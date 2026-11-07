@@ -19,16 +19,25 @@ static int	ft_step(const char *format, int *i, va_list *ap)
 	if (format[*i] == '%')
 	{
 		if (!format[*i + 1])
+		{
+			va_end(*ap);
 			return (-1);
+		}
 		test = ft_handler(format[*i + 1], ap);
 		if (test == -1)
+		{
+			va_end(*ap);
 			return (-1);
+		}
 		*i += 2;
 		return (test);
 	}
 	test = ft_putchar(format[*i]);
 	if (test == -1)
+	{
+		va_end(*ap);
 		return (-1);
+	}
 	(*i)++;
 	return (test);
 }

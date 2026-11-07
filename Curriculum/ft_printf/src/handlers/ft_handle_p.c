@@ -22,7 +22,8 @@ int	ft_handle_p(va_list *ap)
 		return (ft_putstr("(nil)"));
 	else
 	{
-		if (write(1, "0x", 2) == -1)
+		test = ft_putstr("0x");
+		if (test == -1)
 			return (-1);
 		test = ft_putbase(up, BASE16MIN);
 		if (test == -1)

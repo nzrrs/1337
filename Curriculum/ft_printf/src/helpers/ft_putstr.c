@@ -19,7 +19,8 @@ int	ft_putstr(char *s)
 	i = 0;
 	while (s[i])
 	{
-		ft_putchar(s[i]);
+		if (ft_putchar(s[i]) == -1)
+			return (-1);
 		i++;
 	}
 	return (i);
