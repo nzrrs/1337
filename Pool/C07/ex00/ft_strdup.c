@@ -12,13 +12,23 @@
 
 #include <stdlib.h>
 
+int	ft_strlen(const char *s)
+{
+	int i;
+
+	i = 0;
+	while (s[i] != '\0')
+		i++;
+	return (i);
+}
+
 char	*ft_strdup(char *src)
 {
 	char	*dest;
 	int		i;
 
 	i = 0;
-	dest = malloc(sizeof(src));
+	dest = malloc(sizeof(ft_strlen(src) + 1);
 	if (dest == NULL)
 		return (NULL);
 	while (src[i])
