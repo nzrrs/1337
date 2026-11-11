@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-static char	*ft_read_to_chunk(int fd, char *buf, char *chunk)
+static char	*ft_read_chunk(int fd, char *buf, char *chunk)
 {
 	int		readed_size;
 	char	*temp;
@@ -22,12 +22,15 @@ static char	*ft_read_to_chunk(int fd, char *buf, char *chunk)
 	{
 		readed_size = read(fd, buf, BUFFER_SIZE);
 		if (readed_size == -1)
+		{
+			free(chunk);
+			chunk = NULL;
 			return (NULL);
+		}
 		buf[readed_size] = '\0';
 		temp = chunk;
 		chunk = ft_strjoin(temp, buf);
 		free(temp);
-		temp = NULL;
 		if (!chunk || chunk[0] == '\0')
 		{
 			free(chunk);
@@ -55,7 +58,7 @@ static char	*ft_get_line(char *chunk)
 	return (line);
 }
 
-static char	*ft_get_left_over(char *chunk)
+static char	*ft_left_over(char *chunk)
 {
 	char	*temp;
 	size_t	new_line_idx;
@@ -65,12 +68,11 @@ static char	*ft_get_left_over(char *chunk)
 	if (pos)
 	{
 		temp = chunk;
-		new_line_idx = (ft_strchr(chunk, '\n') - chunk);
+		new_line_idx = pos - chunk;
 		chunk = ft_substr(temp, new_line_idx + 1, ft_strlen(chunk));
 		free(temp);
-		temp = NULL;
 	}
-	else if (!chunk || chunk[0] == '\0' || !pos)
+	else
 	{
 		free(chunk);
 		chunk = NULL;
@@ -91,15 +93,13 @@ char	*get_next_line(int fd)
 	buf = malloc(BUFFER_SIZE + 1);
 	if (!buf)
 		return (NULL);
-	chunk = ft_read_to_chunk(fd, buf, chunk);
+	chunk = ft_read_chunk(fd, buf, chunk);
+	free(buf);
 	if (!chunk)
 	{
-		free(buf);
 		return (NULL);
 	}
 	line = ft_get_line(chunk);
-	chunk = ft_get_left_over(chunk);
-	free(buf);
-	buf = NULL;
+	chunk = ft_left_over(chunk);
 	return (line);
 }
