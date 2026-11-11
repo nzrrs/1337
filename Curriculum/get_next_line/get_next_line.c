@@ -20,34 +20,18 @@ char	*get_next_line(int fd)
 	int			readed_size;
 	int			new_line_idx;
 	char		*result;
+	char		*temp;
 
-	// init
-	readed_size = 0;
-	// if chunk is null
-	if (!chunk)
-		chunk = ft_strdup("");
-	result = ft_strdup("");
-	buf = malloc(BUFFER_SIZE + 1);
-	// check guards
+	readed_size = 1;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	// first read
-	readed_size = read(fd, buf, BUFFER_SIZE);
-	// check read
-	if (readed_size == -1)
-		return (NULL);
-	buf[readed_size] = '\0';
-	// append buf to chunk;
-	chunk = ft_strjoin(chunk, buf);
-	if (chunk[0] == '\0')
-	{
-		free(chunk);
-		chunk = NULL;
-		return (NULL);
-	}
-	// if chunk still dont have new line re-read and append
+	if (!chunk)
+		chunk = ft_strdup("");
 	while (!ft_strchr(chunk, '\n') && readed_size > 0)
 	{
+		buf = malloc(BUFFER_SIZE + 1);
+		if (!buf)
+			return (NULL);
 		readed_size = read(fd, buf, BUFFER_SIZE);
 		if (readed_size == -1)
 		{
@@ -56,23 +40,34 @@ char	*get_next_line(int fd)
 			return (NULL);
 		}
 		buf[readed_size] = '\0';
-		chunk = ft_strjoin(chunk, buf);
+		temp = chunk;
+		chunk = ft_strjoin(temp, buf);
+		free(temp);
+		free(buf);
+		if (!chunk || chunk[0] == '\0')
+		{
+			free(chunk);
+			return (NULL);
+		}
 	}
-	// if chunk now have new line
-	if (ft_strchr(chunk, '\n'))
+	if (ft_strchr(chunk, '\n') && readed_size >= 0)
 	{
+		temp = chunk;
 		new_line_idx = (ft_strchr(chunk, '\n') - chunk);
-		result = ft_substr(chunk, 0, new_line_idx + 1);
-		chunk = ft_substr(chunk, new_line_idx + 1, ft_strlen(chunk));
+		result = ft_substr(temp, 0, new_line_idx + 1);
+		chunk = ft_substr(temp, new_line_idx + 1, ft_strlen(chunk));
+		free(temp);
 	}
-	else if (!ft_strchr(chunk, '\n') && readed_size == 0)
+	else if (!ft_strchr(chunk, '\n') && readed_size >= 0)
 	{
 		result = ft_strdup(chunk);
 		free(chunk);
-		chunk = NULL;
-		return (result);
 	}
 	else if (readed_size == -1)
+	{
+		free(chunk);
+		free(buf);
 		return (NULL);
+	}
 	return (result);
 }

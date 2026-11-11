@@ -40,13 +40,13 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strjoin(const char *s1, const char *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*dest;
 	size_t	i;
 	size_t	j;
 
-	if (!s1 && !s2)
+	if (!s1 || !s2)
 		return (NULL);
 	dest = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!dest)
@@ -72,7 +72,7 @@ char	*ft_strdup(const char *src)
 	i = 0;
 	if (!src)
 		return (NULL);
-	dest = malloc(sizeof(ft_strlen(src) + 1));
+	dest = malloc(ft_strlen(src) + 1);
 	if (dest == NULL)
 		return (NULL);
 	while (src[i])
