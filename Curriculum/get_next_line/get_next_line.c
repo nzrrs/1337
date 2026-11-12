@@ -18,13 +18,12 @@ static char	*fill_stash(int fd, char *read_buf, char *stash)
 	char	*old;
 
 	bytes_read = 1;
-	while (!ft_strchr(stash, '\n') && bytes_read > 0)
+	while (stash && !ft_strchr(stash, '\n') && bytes_read > 0)
 	{
 		bytes_read = read(fd, read_buf, BUFFER_SIZE);
 		if (bytes_read == -1)
 		{
 			free(stash);
-			stash = NULL;
 			return (NULL);
 		}
 		read_buf[bytes_read] = '\0';
@@ -34,7 +33,6 @@ static char	*fill_stash(int fd, char *read_buf, char *stash)
 		if (!stash || stash[0] == '\0')
 		{
 			free(stash);
-			stash = NULL;
 			return (NULL);
 		}
 	}
@@ -43,7 +41,7 @@ static char	*fill_stash(int fd, char *read_buf, char *stash)
 
 static char	*extract_line(char *stash)
 {
-	int		line_len;
+	size_t	line_len;
 	char	*line;
 	char	*nl;
 
@@ -64,7 +62,7 @@ static char	*trim_stash(char *stash)
 	char	*nl;
 
 	nl = ft_strchr(stash, '\n');
-	if (nl)
+	if (nl && nl[1] != '\0')
 	{
 		old = stash;
 		stash = ft_strdup(nl + 1);
@@ -94,10 +92,14 @@ char	*get_next_line(int fd)
 	stash = fill_stash(fd, read_buf, stash);
 	free(read_buf);
 	if (!stash)
+		return (NULL);
+	line = extract_line(stash);
+	if (!line)
 	{
+		free(stash);
+		stash = NULL;
 		return (NULL);
 	}
-	line = extract_line(stash);
 	stash = trim_stash(stash);
 	return (line);
 }
