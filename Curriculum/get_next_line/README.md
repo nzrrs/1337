@@ -2,44 +2,50 @@
 
 # get_next_line
 
+Read a file one line at a time, using only a file descriptor.
+
 ## Description
 
-`get_next_line` is a C function that reads and returns one line at a time from a
-file descriptor. A line includes the terminating newline character when one is
-present. When the end of the file is reached, the function returns the final
-line if it contains data, then returns `NULL` on subsequent calls.
-
-The goal of the project is to understand file descriptors, the `read` system
-call, dynamic memory allocation, string manipulation, and how to preserve data
-between function calls. This implementation uses a static stash to keep
-characters that were read after the end of the current line.
-
-The public function is:
+`get_next_line` implements:
 
 ```c
 char	*get_next_line(int fd);
 ```
 
-The returned string is allocated dynamically and must be freed by the caller.
+Each call returns the next line, including `\n` when it is present. It returns
+`NULL` when there is nothing left to read or when an error occurs.
+
+The project is about understanding `read`, file descriptors, dynamic memory,
+and how data can survive between function calls.
+
+## How it works
+
+The function keeps unread characters in a **stash**:
+
+1. Read a chunk of bytes into a temporary buffer.
+2. Append the chunk to the stash until a newline is found.
+3. Return the first complete line.
+4. Keep the remaining characters for the next call.
+
+This algorithm is necessary because one `read` call can return part of a line,
+one complete line, or several lines. The stash prevents data from being lost.
+The mandatory version uses one static stash, which is simple and matches the
+project requirements. Its trade-off is that each append copies the existing
+stash, keeping the implementation clear at the cost of some performance.
 
 ## Instructions
 
-### Compilation
-
-This project does not include a `Makefile`. Compile the source files with
-`cc`, choosing a `BUFFER_SIZE` appropriate for the test:
+There is no `Makefile` in this project. Compile it with a chosen
+`BUFFER_SIZE`:
 
 ```bash
 cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 \
 	get_next_line.c get_next_line_utils.c main.c -o get_next_line
 ```
 
-`BUFFER_SIZE` may be changed without modifying the source code. If it is not
-defined during compilation, the header uses `4096` as a fallback value.
+If `BUFFER_SIZE` is not provided, the header uses `4096`.
 
-### Usage
-
-Open a file, call `get_next_line` until it returns `NULL`, and free each line:
+Example:
 
 ```c
 #include "get_next_line.h"
@@ -54,65 +60,53 @@ int	main(void)
 	fd = open("input.txt", O_RDONLY);
 	if (fd == -1)
 		return (1);
-	line = get_next_line(fd);
-	while (line)
+	while ((line = get_next_line(fd)) != NULL)
 	{
 		printf("%s", line);
 		free(line);
-		line = get_next_line(fd);
 	}
 	close(fd);
 	return (0);
 }
 ```
 
-Run the compiled program with:
+Run the program with:
 
 ```bash
 ./get_next_line
 ```
 
-The function returns `NULL` for an invalid file descriptor, an invalid
-`BUFFER_SIZE`, a read error, or when there is no more data to return.
+The caller owns each returned line and must free it.
 
-## Algorithm
+## Bonus
 
-The implementation uses a dynamically allocated **stash** and a fixed-size
-read buffer:
+The bonus version must:
 
-1. `get_next_line` validates the file descriptor and allocates a temporary
-   buffer of `BUFFER_SIZE + 1` bytes.
-2. `fill_stash` repeatedly calls `read` while the stash does not contain a
-   newline. Each chunk is null-terminated and appended to the stash.
-3. `extract_line` searches for the first newline. If it finds one, it returns
-   everything through that newline; otherwise, it returns the remaining
-   characters as the final line.
-4. `trim_stash` removes the line that was returned and keeps any characters
-   after the newline for the next call.
-5. The stash is stored in a static variable, so it survives after
-   `get_next_line` returns.
+- use only one static variable;
+- read from several file descriptors without mixing their state;
+- keep a separate stash for each `fd`.
 
-This approach is appropriate because `read` can return a partial line or
-several lines in one call. Keeping the unread remainder avoids losing data and
-means each call returns exactly one line. The implementation uses a single
-static stash, so it is designed for reading one file descriptor at a time.
+For example, calls may alternate between file descriptors `3`, `4`, and `5`
+without losing any buffered data. A static array of stash pointers indexed by
+file descriptor is a straightforward way to meet this requirement.
 
-The trade-off is that each append allocates a new string and copies the
-existing stash. This keeps the code simple and clear for the project while
-using only standard system calls and dynamic memory allocation.
+The bonus files are:
+
+```text
+get_next_line_bonus.c
+get_next_line_bonus.h
+get_next_line_utils_bonus.c
+```
 
 ## Resources
 
 - [`read(2)` manual page](https://man7.org/linux/man-pages/man2/read.2.html)
-- [`open(2)` manual page](https://man7.org/linux/man-pages/man2/open.2.html)
-- [`close(2)` manual page](https://man7.org/linux/man-pages/man2/close.2.html)
+- [`open(2)` and `close(2)` manual pages](https://man7.org/linux/man-pages/man2/open.2.html)
 - [`malloc(3)` manual page](https://man7.org/linux/man-pages/man3/malloc.3.html)
-- [42 subject: get_next_line](https://cdn.intra.42.fr/pdf/pdf/41344/en.subject.pdf)
-- [Beej's Guide to Unix IPC: file descriptors](https://beej.us/guide/bgipc/html/split/index.html)
+- [42 get_next_line subject](https://cdn.intra.42.fr/pdf/pdf/41344/en.subject.pdf)
 
-### Use of AI
+### AI usage
 
-AI was used for documentation tasks in this project: checking the README
-against the 42 README requirements, organizing the sections, and helping
-explain the stash-based line-reading algorithm and its trade-offs. AI was not
-used to replace the implementation or testing of the C source files.
+AI was used to review the README requirements, improve the documentation
+structure, and explain the stash algorithm. The C implementation and its tests
+were written and checked manually.
