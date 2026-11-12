@@ -14,6 +14,7 @@ a.out
 ./Curriculum/**/*.so
 Curriculum/libft-unit-test/
 Curriculum/ft_printf/printfTester/
-
+Curriculum/**/main.c
+Curriculum/**/a.out
 Curriculum/ft_printf/compile_flags.txt
 Curriculum/get_next_line/gnlTester/
