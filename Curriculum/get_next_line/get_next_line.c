@@ -14,7 +14,7 @@
 
 static char	*fill_stash(int fd, char *read_buf, char *stash)
 {
-	int		bytes_read;
+	ssize_t	bytes_read;
 	char	*old;
 
 	bytes_read = 1;

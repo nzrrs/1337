@@ -22,8 +22,6 @@
 #  define BUFFER_SIZE 4096
 # endif
 
-// MACROS
-# define SIZET_MAX 18446744073709551615UL
 // MAIN PROTOTYPES
 char	*get_next_line(int fd);
 
