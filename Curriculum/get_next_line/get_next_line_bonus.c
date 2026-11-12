@@ -14,7 +14,7 @@
 
 static char	*fill_stash(int fd, char *read_buf, char *stash)
 {
-	int		bytes_read;
+	ssize_t	bytes_read;
 	char	*old;
 
 	bytes_read = 1;
@@ -56,24 +56,28 @@ static char	*extract_line(char *stash)
 	return (line);
 }
 
-static char	*trim_stash(char *stash)
+static int	trim_stash(char **stash)
 {
 	char	*old;
 	char	*nl;
+	char	*new_stash;
 
-	nl = ft_strchr(stash, '\n');
+	nl = ft_strchr(*stash, '\n');
 	if (nl && nl[1] != '\0')
 	{
-		old = stash;
-		stash = ft_strdup(nl + 1);
+		new_stash = ft_strdup(nl + 1);
+		if (!new_stash)
+			return (-1);
+		old = *stash;
+		*stash = new_stash;
 		free(old);
 	}
 	else
 	{
-		free(stash);
-		stash = NULL;
+		free(*stash);
+		*stash = NULL;
 	}
-	return (stash);
+	return (0);
 }
 
 char	*get_next_line(int fd)
@@ -82,11 +86,12 @@ char	*get_next_line(int fd)
 	char		*line;
 	char		*read_buf;
 
-	if ((fd < 0 || fd >= 1024) || BUFFER_SIZE <= 0)
+	if ((fd < 0 || fd >= 1024) || BUFFER_SIZE <= 0
+		|| BUFFER_SIZE > 2147483646)
 		return (NULL);
 	if (!stash[fd])
 		stash[fd] = ft_strdup("");
-	read_buf = malloc(BUFFER_SIZE + 1);
+	read_buf = malloc((size_t)BUFFER_SIZE + 1);
 	if (!read_buf)
 		return (NULL);
 	stash[fd] = fill_stash(fd, read_buf, stash[fd]);
@@ -100,6 +105,10 @@ char	*get_next_line(int fd)
 		stash[fd] = NULL;
 		return (NULL);
 	}
-	stash[fd] = trim_stash(stash[fd]);
+	if (trim_stash(&stash[fd]) == -1)
+	{
+		free(line);
+		return (NULL);
+	}
 	return (line);
 }
