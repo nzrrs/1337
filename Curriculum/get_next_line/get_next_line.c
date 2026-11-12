@@ -12,94 +12,92 @@
 
 #include "get_next_line.h"
 
-static char	*ft_read_chunk(int fd, char *buf, char *chunk)
+static char	*fill_stash(int fd, char *read_buf, char *stash)
 {
-	int		readed_size;
-	char	*temp;
+	int		bytes_read;
+	char	*old;
 
-	readed_size = 1;
-	while (!ft_strchr(chunk, '\n') && readed_size > 0)
+	bytes_read = 1;
+	while (!ft_strchr(stash, '\n') && bytes_read > 0)
 	{
-		readed_size = read(fd, buf, BUFFER_SIZE);
-		if (readed_size == -1)
+		bytes_read = read(fd, read_buf, BUFFER_SIZE);
+		if (bytes_read == -1)
 		{
-			free(chunk);
-			chunk = NULL;
+			free(stash);
+			stash = NULL;
 			return (NULL);
 		}
-		buf[readed_size] = '\0';
-		temp = chunk;
-		chunk = ft_strjoin(temp, buf);
-		free(temp);
-		if (!chunk || chunk[0] == '\0')
+		read_buf[bytes_read] = '\0';
+		old = stash;
+		stash = ft_strjoin(old, read_buf);
+		free(old);
+		if (!stash || stash[0] == '\0')
 		{
-			free(chunk);
-			chunk = NULL;
+			free(stash);
+			stash = NULL;
 			return (NULL);
 		}
 	}
-	return (chunk);
+	return (stash);
 }
 
-static char	*ft_get_line(char *chunk)
+static char	*extract_line(char *stash)
 {
-	int		new_line_idx;
+	int		line_len;
 	char	*line;
-	char	*pos;
+	char	*nl;
 
-	pos = ft_strchr(chunk, '\n');
-	if (pos)
+	nl = ft_strchr(stash, '\n');
+	if (nl)
 	{
-		new_line_idx = pos - chunk;
-		line = ft_substr(chunk, 0, new_line_idx + 1);
+		line_len = (nl - stash) + 1;
+		line = ft_substr(stash, 0, line_len);
 	}
 	else
-		line = ft_strdup(chunk);
+		line = ft_strdup(stash);
 	return (line);
 }
 
-static char	*ft_left_over(char *chunk)
+static char	*trim_stash(char *stash)
 {
-	char	*temp;
-	size_t	new_line_idx;
-	char	*pos;
+	char	*old;
+	char	*nl;
 
-	pos = ft_strchr(chunk, '\n');
-	if (pos)
+	nl = ft_strchr(stash, '\n');
+	if (nl)
 	{
-		temp = chunk;
-		new_line_idx = pos - chunk;
-		chunk = ft_substr(temp, new_line_idx + 1, ft_strlen(chunk));
-		free(temp);
+		old = stash;
+		stash = ft_strdup(nl + 1);
+		free(old);
 	}
 	else
 	{
-		free(chunk);
-		chunk = NULL;
+		free(stash);
+		stash = NULL;
 	}
-	return (chunk);
+	return (stash);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*chunk;
+	static char	*stash;
 	char		*line;
-	char		*buf;
+	char		*read_buf;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!chunk)
-		chunk = ft_strdup("");
-	buf = malloc(BUFFER_SIZE + 1);
-	if (!buf)
+	if (!stash)
+		stash = ft_strdup("");
+	read_buf = malloc(BUFFER_SIZE + 1);
+	if (!read_buf)
 		return (NULL);
-	chunk = ft_read_chunk(fd, buf, chunk);
-	free(buf);
-	if (!chunk)
+	stash = fill_stash(fd, read_buf, stash);
+	free(read_buf);
+	if (!stash)
 	{
 		return (NULL);
 	}
-	line = ft_get_line(chunk);
-	chunk = ft_left_over(chunk);
+	line = extract_line(stash);
+	stash = trim_stash(stash);
 	return (line);
 }
