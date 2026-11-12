@@ -30,11 +30,11 @@ static char	*fill_stash(int fd, char *read_buf, char *stash)
 		old = stash;
 		stash = ft_strjoin(old, read_buf);
 		free(old);
-		if (!stash || stash[0] == '\0')
-		{
-			free(stash);
-			return (NULL);
-		}
+	}
+	if (!stash || stash[0] == '\0')
+	{
+		free(stash);
+		return (NULL);
 	}
 	return (stash);
 }
