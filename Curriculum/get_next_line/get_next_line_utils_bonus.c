@@ -17,7 +17,7 @@ size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
-	while (s[i] != '\0')
+	while (s && s[i] != '\0')
 		i++;
 	return (i);
 }
@@ -93,7 +93,7 @@ char	*ft_substr(const char *s, unsigned int start, size_t len)
 
 	i = start;
 	j = 0;
-	if (s == NULL)
+	if (!s)
 		return (NULL);
 	s_len = ft_strlen(s);
 	if (start >= s_len || len == 0)

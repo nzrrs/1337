@@ -12,13 +12,67 @@
 
 #include "get_next_line_bonus.h"
 
-static char	*fill_stash(int fd, char *read_buf, char *stash)
+// get_node (2 cases)
+// it find an node by fd return it,
+// create it if no node with that fd append it then,return it
+//
+//
+// remove_node
+// cleanup the stash, unlink the node and free it
+
+static t_list	*get_node(t_list **head, int fd)
+{
+	t_list	*current;
+	t_list	*new_node;
+
+	current = *head;
+	while (current)
+	{
+		if (current->fd == fd)
+			return (current);
+		current = current->next;
+	}
+	new_node = malloc(sizeof(t_list));
+	if (new_node == NULL)
+		return (NULL);
+	new_node->fd = fd;
+	new_node->stash = ft_strdup("");
+	new_node->next = *head;
+	*head = new_node;
+	return (new_node);
+}
+
+static void	remove_node(t_list **head, int fd)
+{
+	t_list	*current;
+	t_list	*prev;
+
+	current = *head;
+	prev = NULL;
+	while (current)
+	{
+		if (current->fd == fd)
+		{
+			if (prev == NULL)
+				*head = current->next;
+			else
+				prev->next = current->next;
+			free(current->stash);
+			free(current);
+			return ;
+		}
+		prev = current;
+		current = current->next;
+	}
+}
+
+static char	*fill_node_stash(int fd, char *read_buf, char *stash)
 {
 	ssize_t	bytes_read;
 	char	*old;
 
 	bytes_read = 1;
-	while (stash && !ft_strchr(stash, '\n') && bytes_read > 0)
+	while (!ft_strchr(stash, '\n') && bytes_read > 0)
 	{
 		bytes_read = read(fd, read_buf, BUFFER_SIZE);
 		if (bytes_read == -1)
@@ -28,78 +82,37 @@ static char	*fill_stash(int fd, char *read_buf, char *stash)
 		}
 		read_buf[bytes_read] = '\0';
 		old = stash;
-		stash = ft_strjoin(old, read_buf);
+		stash = ft_strjoin(stash, read_buf);
 		free(old);
 	}
-	if (!stash || stash[0] == '\0')
+	if (!stash || !stash[0])
 	{
 		free(stash);
 		return (NULL);
-	}
-	return (stash);
-}
-
-static char	*extract_line(char *stash)
-{
-	size_t	line_len;
-	char	*line;
-	char	*nl;
-
-	nl = ft_strchr(stash, '\n');
-	if (nl)
-	{
-		line_len = (nl - stash) + 1;
-		line = ft_substr(stash, 0, line_len);
-	}
-	else
-		line = ft_strdup(stash);
-	return (line);
-}
-
-static char	*trim_stash(char *stash)
-{
-	char	*old;
-	char	*nl;
-
-	nl = ft_strchr(stash, '\n');
-	if (nl && nl[1] != '\0')
-	{
-		old = stash;
-		stash = ft_strdup(nl + 1);
-		free(old);
-	}
-	else
-	{
-		free(stash);
-		stash = NULL;
 	}
 	return (stash);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*stash[MAX_FD];
-	char		*line;
-	char		*read_buf;
+	static t_list	*head;
+	char			*read_buf;
+	t_list			*node;
 
-	if ((fd < 0 || fd >= MAX_FD) || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!stash[fd])
-		stash[fd] = ft_strdup("");
+	node = get_node(&head, fd);
+	if (!node)
+		return (NULL);
 	read_buf = malloc(BUFFER_SIZE + 1);
 	if (!read_buf)
 		return (NULL);
-	stash[fd] = fill_stash(fd, read_buf, stash[fd]);
+	node->stash = fill_node_stash(fd, read_buf, node->stash);
 	free(read_buf);
-	if (!stash[fd])
-		return (NULL);
-	line = extract_line(stash[fd]);
-	if (!line)
+	if (node->stash == NULL)
 	{
-		free(stash[fd]);
-		stash[fd] = NULL;
+		remove_node(&head, fd);
 		return (NULL);
 	}
-	stash[fd] = trim_stash(stash[fd]);
-	return (line);
+	return ("/s3dani_lhmdani");
 }

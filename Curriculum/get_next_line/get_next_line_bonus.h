@@ -17,22 +17,25 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-// FALLBACK MACRO DEF FOR BUFFER_SIZE AND MAX_FD
+// FALLBACK MACRO DEF FOR BUFFER_SIZE
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 4096
 # endif
 
-# ifndef MAX_FD
-#  define MAX_FD 1024
-# endif
-
+// LINKED LIST STRUCT
+typedef struct s_list
+{
+	int				fd;
+	char			*stash;
+	struct s_list	*next;
+}					t_list;
 // MAIN PROTOTYPES
-char	*get_next_line(int fd);
+char				*get_next_line(int fd);
 
-// UTILS PROTOTYPES
-size_t	ft_strlen(const char *s);
-char	*ft_strchr(const char *s, int c);
-char	*ft_substr(const char *s, unsigned int start, size_t len);
-char	*ft_strdup(const char *src);
-char	*ft_strjoin(const char *s1, const char *s2);
+// BONUS UTILS PROTOTYPES
+size_t				ft_strlen(const char *s);
+char				*ft_strchr(const char *s, int c);
+char				*ft_substr(const char *s, unsigned int start, size_t len);
+char				*ft_strdup(const char *src);
+char				*ft_strjoin(const char *s1, const char *s2);
 #endif
