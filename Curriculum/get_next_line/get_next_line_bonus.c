@@ -12,14 +12,6 @@
 
 #include "get_next_line_bonus.h"
 
-// get_node (2 cases)
-// it find an node by fd return it,
-// create it if no node with that fd append it then,return it
-//
-//
-// remove_node
-// cleanup the stash, unlink the node and free it
-
 static t_list	*get_node(t_list **head, int fd)
 {
 	t_list	*current;
@@ -93,11 +85,39 @@ static char	*fill_node_stash(int fd, char *read_buf, char *stash)
 	return (stash);
 }
 
+static char	*extract_trim(int fd, t_list **head, t_list *node)
+{
+	char	*nl;
+	char	*old;
+	char	*line;
+
+	nl = ft_strchr(node->stash, '\n');
+	if (nl)
+	{
+		line = ft_substr(node->stash, 0, (nl - node->stash) + 1);
+		if (nl[1] != '\0')
+		{
+			old = node->stash;
+			node->stash = ft_strdup(nl + 1);
+			free(old);
+		}
+		else
+			remove_node(head, fd);
+	}
+	else
+	{
+		line = ft_strdup(node->stash);
+		remove_node(head, fd);
+	}
+	return (line);
+}
+
 char	*get_next_line(int fd)
 {
 	static t_list	*head;
 	char			*read_buf;
 	t_list			*node;
+	char			*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -106,7 +126,10 @@ char	*get_next_line(int fd)
 		return (NULL);
 	read_buf = malloc(BUFFER_SIZE + 1);
 	if (!read_buf)
+	{
+		remove_node(&head, fd);
 		return (NULL);
+	}
 	node->stash = fill_node_stash(fd, read_buf, node->stash);
 	free(read_buf);
 	if (node->stash == NULL)
@@ -114,5 +137,6 @@ char	*get_next_line(int fd)
 		remove_node(&head, fd);
 		return (NULL);
 	}
-	return ("/s3dani_lhmdani");
+	line = extract_trim(fd, &head, node);
+	return (line);
 }
