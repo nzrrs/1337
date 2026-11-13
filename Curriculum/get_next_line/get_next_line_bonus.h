@@ -17,9 +17,13 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-// FALLBACK MACRO DEF FOR BUFFER_SIZE
+// FALLBACK MACRO DEF FOR BUFFER_SIZE AND MAX_FD
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 4096
+# endif
+
+# ifndef MAX_FD
+#  define MAX_FD 1024
 # endif
 
 // MAIN PROTOTYPES

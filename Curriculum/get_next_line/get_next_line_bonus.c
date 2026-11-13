@@ -78,11 +78,11 @@ static char	*trim_stash(char *stash)
 
 char	*get_next_line(int fd)
 {
-	static char	*stash[1024];
+	static char	*stash[MAX_FD];
 	char		*line;
 	char		*read_buf;
 
-	if ((fd < 0 || fd >= 1024) || BUFFER_SIZE <= 0)
+	if ((fd < 0 || fd >= MAX_FD) || BUFFER_SIZE <= 0)
 		return (NULL);
 	if (!stash[fd])
 		stash[fd] = ft_strdup("");
