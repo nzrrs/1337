@@ -34,7 +34,7 @@ static char	*fill_stash(int fd, char *read_buf, char *stash)
 			break ;
 		read_buf[bytes_read] = '\0';
 		old = stash;
-		stash = ft_strjoin(old, read_buf);
+		stash = ft_strjoin(stash, read_buf);
 		free(old);
 	}
 	if (!stash || stash[0] == '\0')
