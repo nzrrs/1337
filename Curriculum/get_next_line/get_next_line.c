@@ -12,6 +12,13 @@
 
 #include "get_next_line.h"
 
+static char	*free_stash(char **stash)
+{
+	free(*stash);
+	*stash = NULL;
+	return (NULL);
+}
+
 static char	*fill_stash(int fd, char *read_buf, char *stash)
 {
 	ssize_t	bytes_read;
@@ -22,10 +29,7 @@ static char	*fill_stash(int fd, char *read_buf, char *stash)
 	{
 		bytes_read = read(fd, read_buf, BUFFER_SIZE);
 		if (bytes_read == -1)
-		{
-			free(stash);
-			return (NULL);
-		}
+			return (free_stash(&stash));
 		if (bytes_read == 0)
 			break ;
 		read_buf[bytes_read] = '\0';
@@ -34,48 +38,35 @@ static char	*fill_stash(int fd, char *read_buf, char *stash)
 		free(old);
 	}
 	if (!stash || stash[0] == '\0')
-	{
-		free(stash);
-		return (NULL);
-	}
+		return (free_stash(&stash));
 	return (stash);
 }
 
-static char	*extract_line(char *stash)
+static char	*extract_and_trim(char **stash)
 {
-	size_t	line_len;
-	char	*line;
 	char	*nl;
-
-	nl = ft_strchr(stash, '\n');
-	if (nl)
-	{
-		line_len = (nl - stash) + 1;
-		line = ft_substr(stash, 0, line_len);
-	}
-	else
-		line = ft_strdup(stash);
-	return (line);
-}
-
-static char	*trim_stash(char *stash)
-{
 	char	*old;
-	char	*nl;
+	char	*line;
 
-	nl = ft_strchr(stash, '\n');
-	if (nl && nl[1] != '\0')
+	nl = ft_strchr(*stash, '\n');
+	if (nl)
+		line = ft_substr(*stash, 0, (nl - *stash) + 1);
+	else
+		line = ft_strdup(*stash);
+	if (line && nl && nl[1] != '\0')
 	{
-		old = stash;
-		stash = ft_strdup(nl + 1);
+		old = *stash;
+		*stash = ft_strdup(nl + 1);
 		free(old);
+		if (!*stash)
+		{
+			free(line);
+			return (NULL);
+		}
 	}
 	else
-	{
-		free(stash);
-		stash = NULL;
-	}
-	return (stash);
+		free_stash(stash);
+	return (line);
 }
 
 char	*get_next_line(int fd)
@@ -90,18 +81,11 @@ char	*get_next_line(int fd)
 		stash = ft_strdup("");
 	read_buf = malloc(BUFFER_SIZE + 1);
 	if (!read_buf)
-		return (NULL);
+		return (free_stash(&stash));
 	stash = fill_stash(fd, read_buf, stash);
 	free(read_buf);
 	if (!stash)
 		return (NULL);
-	line = extract_line(stash);
-	if (!line)
-	{
-		free(stash);
-		stash = NULL;
-		return (NULL);
-	}
-	stash = trim_stash(stash);
+	line = extract_and_trim(&stash);
 	return (line);
 }

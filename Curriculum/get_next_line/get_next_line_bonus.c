@@ -29,6 +29,11 @@ static t_list	*get_node(t_list **head, int fd)
 		return (NULL);
 	new_node->fd = fd;
 	new_node->stash = ft_strdup("");
+	if (!new_node->stash)
+	{
+		free(new_node);
+		return (NULL);
+	}
 	new_node->next = *head;
 	*head = new_node;
 	return (new_node);
@@ -87,7 +92,7 @@ static char	*fill_node_stash(int fd, char *read_buf, char *stash)
 	return (stash);
 }
 
-static char	*extract_trim(int fd, t_list **head, t_list *node)
+static char	*extract_and_trim(int fd, t_list **head, t_list *node)
 {
 	char	*nl;
 	char	*old;
@@ -95,22 +100,22 @@ static char	*extract_trim(int fd, t_list **head, t_list *node)
 
 	nl = ft_strchr(node->stash, '\n');
 	if (nl)
-	{
 		line = ft_substr(node->stash, 0, (nl - node->stash) + 1);
-		if (nl[1] != '\0')
+	else
+		line = ft_strdup(node->stash);
+	if (line && nl && nl[1])
+	{
+		old = node->stash;
+		node->stash = ft_strdup(nl + 1);
+		free(old);
+		if (!node->stash)
 		{
-			old = node->stash;
-			node->stash = ft_strdup(nl + 1);
-			free(old);
+			free(line);
+			return (NULL);
 		}
-		else
-			remove_node(head, fd);
 	}
 	else
-	{
-		line = ft_strdup(node->stash);
 		remove_node(head, fd);
-	}
 	return (line);
 }
 
@@ -139,6 +144,6 @@ char	*get_next_line(int fd)
 		remove_node(&head, fd);
 		return (NULL);
 	}
-	line = extract_trim(fd, &head, node);
+	line = extract_and_trim(fd, &head, node);
 	return (line);
 }
