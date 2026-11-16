@@ -37,7 +37,7 @@ static char	*fill_stash(int fd, char *read_buf, char *stash)
 		stash = ft_strjoin(stash, read_buf);
 		free(old);
 	}
-	if (!stash || stash[0] == '\0')
+	if (!stash || !stash[0])
 		return (free_stash(&stash));
 	return (stash);
 }
@@ -53,7 +53,7 @@ static char	*extract_and_trim(char **stash)
 		line = ft_substr(*stash, 0, (nl - *stash) + 1);
 	else
 		line = ft_strdup(*stash);
-	if (line && nl && nl[1] != '\0')
+	if (line && nl && nl[1])
 	{
 		old = *stash;
 		*stash = ft_strdup(nl + 1);

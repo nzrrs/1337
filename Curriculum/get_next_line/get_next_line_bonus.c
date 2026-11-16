@@ -25,7 +25,7 @@ static t_list	*get_node(t_list **head, int fd)
 		current = current->next;
 	}
 	new_node = malloc(sizeof(t_list));
-	if (new_node == NULL)
+	if (!new_node)
 		return (NULL);
 	new_node->fd = fd;
 	new_node->stash = ft_strdup("");
@@ -139,7 +139,7 @@ char	*get_next_line(int fd)
 	}
 	node->stash = fill_node_stash(fd, read_buf, node->stash);
 	free(read_buf);
-	if (node->stash == NULL)
+	if (!node->stash)
 	{
 		remove_node(&head, fd);
 		return (NULL);
