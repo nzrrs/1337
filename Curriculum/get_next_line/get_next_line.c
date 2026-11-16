@@ -75,11 +75,11 @@ char	*get_next_line(int fd)
 	char		*line;
 	char		*read_buf;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
 	if (!stash)
 		stash = ft_strdup("");
-	read_buf = malloc(BUFFER_SIZE + 1);
+	read_buf = malloc((size_t)BUFFER_SIZE + 1);
 	if (!read_buf)
 		return (free_stash(&stash));
 	stash = fill_stash(fd, read_buf, stash);

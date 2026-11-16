@@ -126,12 +126,12 @@ char	*get_next_line(int fd)
 	t_list			*node;
 	char			*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
 	node = get_node(&head, fd);
 	if (!node)
 		return (NULL);
-	read_buf = malloc(BUFFER_SIZE + 1);
+	read_buf = malloc((size_t)BUFFER_SIZE + 1);
 	if (!read_buf)
 	{
 		remove_node(&head, fd);
