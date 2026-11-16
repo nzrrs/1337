@@ -126,7 +126,7 @@ char	*get_next_line(int fd)
 	t_list			*node;
 	char			*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	node = get_node(&head, fd);
 	if (!node)

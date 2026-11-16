@@ -75,7 +75,7 @@ char	*get_next_line(int fd)
 	char		*line;
 	char		*read_buf;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	if (!stash)
 		stash = ft_strdup("");
