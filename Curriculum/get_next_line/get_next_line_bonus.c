@@ -64,7 +64,7 @@ static char	*fill_node_stash(int fd, char *read_buf, char *stash)
 	char	*old;
 
 	bytes_read = 1;
-	while (!ft_strchr(stash, '\n') && bytes_read > 0)
+	while (stash && !ft_strchr(stash, '\n') && bytes_read > 0)
 	{
 		bytes_read = read(fd, read_buf, BUFFER_SIZE);
 		if (bytes_read == -1)
@@ -72,6 +72,8 @@ static char	*fill_node_stash(int fd, char *read_buf, char *stash)
 			free(stash);
 			return (NULL);
 		}
+		if (bytes_read == 0)
+			break ;
 		read_buf[bytes_read] = '\0';
 		old = stash;
 		stash = ft_strjoin(stash, read_buf);

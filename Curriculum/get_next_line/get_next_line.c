@@ -26,6 +26,8 @@ static char	*fill_stash(int fd, char *read_buf, char *stash)
 			free(stash);
 			return (NULL);
 		}
+		if (bytes_read == 0)
+			break ;
 		read_buf[bytes_read] = '\0';
 		old = stash;
 		stash = ft_strjoin(old, read_buf);
