@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
+#include <stdio.h>
+#include <sys/types.h>
 
 static t_list	*get_node(t_list **head, int fd)
 {
@@ -63,12 +65,11 @@ static void	remove_node(t_list **head, int fd)
 	}
 }
 
-static char	*fill_node_stash(int fd, char *read_buf, char *stash)
+static char	*fill_node_stash(int fd, char *read_buf, char *stash,
+		ssize_t bytes_read)
 {
-	ssize_t	bytes_read;
 	char	*old;
 
-	bytes_read = 1;
 	while (stash && bytes_read > 0)
 	{
 		bytes_read = read(fd, read_buf, BUFFER_SIZE);
@@ -139,7 +140,7 @@ char	*get_next_line(int fd)
 		remove_node(&head, fd);
 		return (NULL);
 	}
-	node->stash = fill_node_stash(fd, read_buf, node->stash);
+	node->stash = fill_node_stash(fd, read_buf, node->stash, 1);
 	free(read_buf);
 	if (!node->stash)
 	{
