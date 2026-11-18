@@ -67,7 +67,7 @@ char	*ft_strjoin(const char *s1, const char *s2)
 char	*ft_strdup(const char *src)
 {
 	char	*dest;
-	int		i;
+	size_t	i;
 
 	i = 0;
 	if (!src)
@@ -84,7 +84,7 @@ char	*ft_strdup(const char *src)
 	return (dest);
 }
 
-char	*ft_substr(const char *s, unsigned int start, size_t len)
+char	*ft_substr(const char *s, size_t start, size_t len)
 {
 	char	*sub;
 	size_t	s_len;
