@@ -25,7 +25,7 @@ static char	*fill_stash(int fd, char *read_buf, char *stash)
 	char	*old;
 
 	bytes_read = 1;
-	while (stash && bytes_read > 0)
+	while (stash && !ft_strchr(stash, '\n') && bytes_read > 0)
 	{
 		bytes_read = read(fd, read_buf, BUFFER_SIZE);
 		if (bytes_read == -1)
@@ -38,8 +38,6 @@ static char	*fill_stash(int fd, char *read_buf, char *stash)
 		free(old);
 		if (!stash)
 			return (free_stash(&stash));
-		if (ft_strchr(stash, '\n'))
-			break ;
 	}
 	if (!stash || !stash[0])
 		return (free_stash(&stash));

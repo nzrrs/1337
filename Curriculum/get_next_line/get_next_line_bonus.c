@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
-#include <stdio.h>
-#include <sys/types.h>
 
 static t_list	*get_node(t_list **head, int fd)
 {
@@ -65,12 +63,13 @@ static void	remove_node(t_list **head, int fd)
 	}
 }
 
-static char	*fill_node_stash(int fd, char *read_buf, char *stash,
-		ssize_t bytes_read)
+static char	*fill_node_stash(int fd, char *read_buf, char *stash)
 {
 	char	*old;
+	ssize_t	bytes_read;
 
-	while (stash && bytes_read > 0)
+	bytes_read = 1;
+	while (stash && !ft_strchr(stash, '\n') && bytes_read > 0)
 	{
 		bytes_read = read(fd, read_buf, BUFFER_SIZE);
 		if (bytes_read == -1)
@@ -84,8 +83,6 @@ static char	*fill_node_stash(int fd, char *read_buf, char *stash,
 		old = stash;
 		stash = ft_strjoin(stash, read_buf);
 		free(old);
-		if (ft_strchr(stash, '\n'))
-			break ;
 	}
 	if (!stash || !stash[0])
 	{
@@ -114,6 +111,7 @@ static char	*extract_and_trim(int fd, t_list **head, t_list *node)
 		if (!node->stash)
 		{
 			free(line);
+			remove_node(head, fd);
 			return (NULL);
 		}
 	}
@@ -140,7 +138,7 @@ char	*get_next_line(int fd)
 		remove_node(&head, fd);
 		return (NULL);
 	}
-	node->stash = fill_node_stash(fd, read_buf, node->stash, 1);
+	node->stash = fill_node_stash(fd, read_buf, node->stash);
 	free(read_buf);
 	if (!node->stash)
 	{
