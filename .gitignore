@@ -1,20 +1,29 @@
-.git
-
-# Compiled outputs
-a.out
-*.out
+# Build outputs
 *.o
-*.obj
 *.a
 *.so
+*.out
+*.exe
 *.dll
 *.dylib
-*.exe
-./Curriculum/**/*.pdf
-./Curriculum/**/*.so
-Curriculum/libft-unit-test/
-Curriculum/ft_printf/printfTester/
-Curriculum/**/main.c
-Curriculum/**/a.out
-Curriculum/ft_printf/compile_flags.txt
-Curriculum/get_next_line/gnlTester/
+*.dSYM/
+
+# Editor / tooling
+.cache/
+compile_commands.json
+compile_flags.txt
+*.swp
+.vscode/
+
+# OS
+.DS_Store
+
+# Cursus: subjects and testers
+Cursus/Subjects/
+Cursus/libft-unit-test/
+Cursus/ft_printf/printfTester/
+Cursus/get_next_line/gnlTester/
+Cursus/push_swap/checker_linux
+
+# Cursus: local test mains
+Cursus/**/main.c
